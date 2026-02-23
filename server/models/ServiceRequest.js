@@ -8,13 +8,8 @@ const ServiceRequestSchema = new mongoose.Schema({
   },
   agent: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Assigned later
   serviceType: {
-    type: String,
-    enum: [
-      "Birth Certificate",
-      "Income Certificate",
-      "Caste Certificate",
-      "Domicile Certificate",
-    ],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Service",
     required: true,
   },
   status: {

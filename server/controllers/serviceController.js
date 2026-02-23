@@ -1,20 +1,32 @@
 const ServiceRequest = require("../models/ServiceRequest");
 
 exports.createRequest = async (req, res) => {
-  console.log("body received by server:", req.body);
   try {
-    const { serviceType, description } = req.body;
+    const { service, description } = req.body;
+
+    // Check if service exists
+    const existingService = await Service.findById(service);
+    if (!existingService) {
+      return res.status(404).json({ message: "Service not found" });
+    }
 
     const newRequest = new ServiceRequest({
-      citizen: req.user.id, // We will get this from the Login Token later
-      serviceType,
+      citizen: req.user.id,
+      service,
       description,
     });
 
     await newRequest.save();
-    res.status(201).json({ success: true, data: newRequest });
+
+    res.status(201).json({
+      success: true,
+      data: newRequest,
+    });
   } catch (err) {
-    res.status(500).json({ message: "Request failed", error: err.message });
+    res.status(500).json({
+      message: "Request failed",
+      error: err.message,
+    });
   }
 };
 

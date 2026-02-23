@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
-const serviceRoutes = require("./routes/ServiceRoutes");
+const serviceRoutes = require("./routes/serviceRoutes");
 
 
 // Load environment variables

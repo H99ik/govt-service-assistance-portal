@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { createRequest } = require("../controllers/serviceController");
-const ServiceRequest = require("../model/ServiceRequest");
+const ServiceRequest = require("../models/ServiceRequest");
 const { protect } = require("../middleware/authMiddleware");
 const { getMyRequests } = require("../controllers/serviceController");
 

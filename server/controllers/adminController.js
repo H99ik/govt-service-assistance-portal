@@ -1,10 +1,15 @@
-const ServiceRequest = require("../model/ServiceRequest");
+const ServiceRequest = require("../models/ServiceRequest");
 
 // Get all certificate requests (Birth, Income, Caste, Domicile)
 exports.getAllRequests = async (req, res) => {
   try {
-    const requests = await ServiceRequest.find().populate("citizen", "name email");
-    res.status(200).json({ success: true, count: requests.length, data: requests });
+    const requests = await ServiceRequest.find().populate(
+      "citizen",
+      "name email",
+    );
+    res
+      .status(200)
+      .json({ success: true, count: requests.length, data: requests });
   } catch (err) {
     res.status(500).json({ message: "Server Error", error: err.message });
   }

@@ -1,7 +1,6 @@
-const ServiceRequest = require("../model/ServiceRequest");
+const ServiceRequest = require("../models/ServiceRequest");
 
 exports.createRequest = async (req, res) => {
-
   console.log("body received by server:", req.body);
   try {
     const { serviceType, description } = req.body;
@@ -20,14 +19,15 @@ exports.createRequest = async (req, res) => {
 };
 
 exports.getMyRequests = async (req, res) => {
-  try{
-    
-    const request = await ServiceRequest.find({ citizen: req.user.id});
-    
-    res.status(200).json({ success: true, count: request.length, data: request});
-  } catch (err){
+  try {
+    const request = await ServiceRequest.find({ citizen: req.user.id });
 
-    res.status(500).json({message: "Could not fetch your requests", error: err.message});
+    res
+      .status(200)
+      .json({ success: true, count: request.length, data: request });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Could not fetch your requests", error: err.message });
   }
-
 };

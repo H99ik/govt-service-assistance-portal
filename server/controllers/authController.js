@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, adminSecret } = req.body;
+    const { name, email, password, adminSecret, agentSecret } = req.body;
 
     // 1. Check if user already exists
     let user = await User.findOne({ email });
@@ -20,11 +20,11 @@ exports.register = async (req, res) => {
     let role = "citizen";
 
     // 4. If admin secret matches, make admin
-    if (
-      adminSecret &&
-      adminSecret === process.env.ADMIN_SECRET
-    ) {
+
+    if (adminSecret && adminSecret === process.env.ADMIN_SECRET) {
       role = "admin";
+    } else if (agentSecret && agentSecret === process.env.AGENT_SECRET) {
+      role = "agent";
     }
 
     // 5. Create user

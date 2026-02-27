@@ -66,6 +66,59 @@ exports.createService = async (req, res) => {
   }
 };
 
+exports.getPendingRequests = async (req, res) => {
+  try {
+    const requests = await ServiceRequest.find({
+      status: "Pending",
+      agent: { $exists: false }
+    })
+      .populate("citizen", "name email")
+      .populate("serviceType");
+
+    res.status(200).json({
+      success: true,
+      count: requests.length,
+      data: requests,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Could not fetch pending requests",
+      error: err.message,
+    });
+  }
+};
+
+// accept request
+exports.acceptRequest = async (req, res) => {
+  try {
+    const request = await ServiceRequest.findById(req.params.id);
+
+    if (!request) {
+      return res.status(404).json({ message: "Request not found" });
+    }
+
+    if (request.status !== "Pending") {
+      return res.status(400).json({ message: "Request already processed" });
+    }
+
+    request.agent = req.user._id;
+    request.status = "In Progress";
+
+    await request.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Request accepted successfully",
+      data: request,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Could not accept request",
+      error: err.message,
+    });
+  }
+};
+
 // Get All Active service 
 exports.getMyRequests = async (req, res) => {
   try {

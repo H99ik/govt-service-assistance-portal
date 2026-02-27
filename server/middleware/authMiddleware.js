@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
 const protect = async (req, res, next) => {
   let token;
 
-  // 1. Check if the token is in the headers
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -11,20 +11,25 @@ const protect = async (req, res, next) => {
     try {
       token = req.headers.authorization.split(" ")[1];
 
-      // 2. Decode the token using your JWT_SECRET
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // 3. Attach user ID to the request object
-      req.user = { id: decoded.id };
+      // Fetch full user from DB
+      const user = await User.findById(decoded.id).select("-password");
 
-      next(); // Move to the next part (the Controller)
+      if (!user) {
+        return res.status(401).json({ message: "User not found" });
+      }
+
+      req.user = user;
+
+      next();
     } catch (error) {
-      res.status(401).json({ message: "Not authorized, token failed" });
+      return res.status(401).json({ message: "Not authorized, token failed" });
     }
   }
 
   if (!token) {
-    res.status(401).json({ message: "Not authorized, no token" });
+    return res.status(401).json({ message: "Not authorized, no token" });
   }
 };
 

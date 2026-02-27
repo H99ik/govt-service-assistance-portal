@@ -1,12 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const { createRequest } = require("../controllers/serviceController");
-const ServiceRequest = require("../models/ServiceRequest");
-const { protect } = require("../middleware/authMiddleware");
-const { getMyRequests } = require("../controllers/serviceController");
 
-// In a real app, we would add "protect" middleware here to ensure only logged-in users can request
-router.post("/request", protect, createRequest);
-router.get("/my-requests", protect, getMyRequests);
+const serviceController = require("../controllers/serviceController");
+const { protect } = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
+
+// User routes
+router.post("/request", protect, serviceController.createRequest);
+router.get("/my-requests", protect, serviceController.getMyRequests);
+
+// Public route
+router.get("/", serviceController.getActiveServices);
+
+// Admin route
+router.post("/", protect, adminMiddleware, serviceController.createService);
 
 module.exports = router;

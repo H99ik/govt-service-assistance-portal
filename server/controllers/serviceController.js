@@ -12,17 +12,21 @@ exports.getActiveServices = async (req, res) => {
 
 exports.createRequest = async (req, res) => {
   try {
-    const { service, description } = req.body;
+    const { serviceType, description } = req.body;
 
-    // Check if service exists
-    const existingService = await Service.findById(service);
+    if (!serviceType) {
+      return res.status(400).json({ message: "Service ID is required" });
+    }
+
+    const existingService = await Service.findById(serviceType);
+
     if (!existingService) {
       return res.status(404).json({ message: "Service not found" });
     }
 
     const newRequest = new ServiceRequest({
-      citizen: req.user.id,
-      service,
+      citizen: req.user._id,
+      serviceType,
       description,
     });
 

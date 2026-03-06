@@ -19,6 +19,8 @@ router.post("/", protect, adminMiddleware, serviceController.createService);
 //pending: agent route to update request status
 router.get("/pending", protect, agentMiddleware, serviceController.getPendingRequests);
 router.put("/accept/:id", protect, agentMiddleware, serviceController.acceptRequest);
+router.get("/my-assigned", protect, agentMiddleware, serviceController.getMyAssignedRequests);
+router.put("/update-status/:id", protect, agentMiddleware, serviceController.updateRequestStatus);
 
 
 module.exports = router;

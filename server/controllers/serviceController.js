@@ -123,6 +123,27 @@ exports.acceptRequest = async (req, res) => {
   }
 };
 
+exports.getMyAssignedRequests = async (req, res) => {
+  try {
+    const requests = await ServiceRequest.find({
+      agent: req.user._id,
+      status: "In Progress",
+    })
+      .populate("citizen", "name email")
+      .populate("serviceType");
+
+    res.status(200).json({
+      success: true,
+      data: requests,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Could not fetch assigned requests",
+      error: err.message,
+    });
+  }
+};
+
 // Get All Active service 
 exports.getMyRequests = async (req, res) => {
   try {
@@ -138,6 +159,31 @@ exports.getMyRequests = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       message: "Could not fetch your requests",
+      error: err.message,
+    });
+  }
+};
+
+exports.updateRequestStatus = async (req, res) => {
+  try {
+    const request = await ServiceRequest.findById(req.params.id);
+
+    if (!request) {
+      return res.status(404).json({ message: "Request not found" });
+    }
+
+    request.status = req.body.status;
+
+    await request.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Request status updated",
+      data: request,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Could not update status",
       error: err.message,
     });
   }

@@ -162,12 +162,24 @@ function AgentDashboard() {
             </p>
 
             {req.status === "In Progress" && (
+              <>
               <button
                 className="btn btn-primary"
                 onClick={() => updateStatus(req._id, "Completed")}
               >
                 Mark Completed
               </button>
+              <button
+                className="btn btn-secondary ms-2"
+                onClick={() => updateStatus(req._id, "Rejected")}
+              >
+                Reject
+              </button>
+              
+             {req.status === "Rejected" && (
+              <span className="badge bg-danger">Rejected</span>
+             )}
+              </>
             )}
           </div>
         ))

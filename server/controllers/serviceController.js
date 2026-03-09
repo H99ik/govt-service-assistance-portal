@@ -3,11 +3,15 @@ const Service = require("../models/Service");
 
 exports.getActiveServices = async (req, res) => {
   try {
-    const services = await Service.find({ isActive: true });   
-    res.status(200).json({ success: true, count: services.length, data: services });
+    const services = await Service.find({ isActive: true });
+    res
+      .status(200)
+      .json({ success: true, count: services.length, data: services });
   } catch (err) {
-    res.status(500).json({ message: "Could not fetch services", error: err.message });
-  } 
+    res
+      .status(500)
+      .json({ message: "Could not fetch services", error: err.message });
+  }
 };
 
 exports.createRequest = async (req, res) => {
@@ -46,7 +50,13 @@ exports.createRequest = async (req, res) => {
 
 exports.createService = async (req, res) => {
   try {
-    const { name, description, requiredDocuments, estimatedTime, serviceCharge } = req.body;
+    const {
+      name,
+      description,
+      requiredDocuments,
+      estimatedTime,
+      serviceCharge,
+    } = req.body;
 
     const newService = new Service({
       name,
@@ -74,7 +84,7 @@ exports.getPendingRequests = async (req, res) => {
   try {
     const requests = await ServiceRequest.find({
       status: "Pending",
-      agent: { $exists: false }
+      agent: { $exists: false },
     })
       .populate("citizen", "name email")
       .populate("serviceType");
@@ -144,11 +154,45 @@ exports.getMyAssignedRequests = async (req, res) => {
   }
 };
 
-// Get All Active service 
+exports.uploadDocument = async (req, res) => {
+  try {
+    const requestId = req.params.requestId;
+
+    const request = await ServiceRequest.findById(requestId);
+
+    if (!request) {
+      return res.status(404).json({
+        message: "Request not found",
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        message: "No file uploaded",
+      });
+    }
+
+    request.documents.push(req.file.filename);
+
+    await request.save();
+
+    res.json({
+      message: "Document uploaded successfully",
+      data: request,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Upload failed",
+      error: error.message,
+    });
+  }
+};
+
+// Get All Active service
 exports.getMyRequests = async (req, res) => {
   try {
     const requests = await ServiceRequest.find({
-      citizen: req.user._id,   // use _id since you're attaching full user
+      citizen: req.user._id, // use _id since you're attaching full user
     }).populate("serviceType"); // correct field name
 
     res.status(200).json({
@@ -170,6 +214,14 @@ exports.updateRequestStatus = async (req, res) => {
 
     if (!request) {
       return res.status(404).json({ message: "Request not found" });
+    }
+
+    const allowedStatuses = ["Pending", "In Progress", "Completed", "Rejected"];
+
+    if (!allowedStatuses.includes(req.body.status)) {
+      return res.status(400).json({
+        message: "Invalid status value",
+      });
     }
 
     request.status = req.body.status;

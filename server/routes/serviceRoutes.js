@@ -5,6 +5,7 @@ const serviceController = require("../controllers/serviceController");
 const { protect } = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
 const agentMiddleware = require("../middleware/agentMiddleware");
+const upload = require("../middleware/uploadMiddleware");
 
 // User routes
 router.post("/request", protect, serviceController.createRequest);
@@ -21,6 +22,6 @@ router.get("/pending", protect, agentMiddleware, serviceController.getPendingReq
 router.put("/accept/:id", protect, agentMiddleware, serviceController.acceptRequest);
 router.get("/my-assigned", protect, agentMiddleware, serviceController.getMyAssignedRequests);
 router.put("/update-status/:id", protect, agentMiddleware, serviceController.updateRequestStatus);
-
+router.post("/upload/:requestId", protect, upload.single("file"), serviceController.uploadDocument);
 
 module.exports = router;

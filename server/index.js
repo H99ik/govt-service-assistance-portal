@@ -22,6 +22,7 @@ app.use(express.json());
 // Use Routes (Move these ABOVE app.listen)
 app.use("/api/auth", authRoutes);
 app.use("/api/services", serviceRoutes);
+app.use("/uploads", express.static("uploads"));
 
 
 // Basic Route

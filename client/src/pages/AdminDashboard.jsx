@@ -13,6 +13,7 @@ function AdminDashboard() {
 
   useEffect(() => {
     fetchRequests();
+    fetchServices();
   }, []);
 
   const fetchRequests = async () => {
@@ -56,6 +57,7 @@ function AdminDashboard() {
       );
 
       alert("Service created successfully");
+      fetchServices();
 
       setServiceData({
         name: "",
@@ -66,6 +68,34 @@ function AdminDashboard() {
       });
     } catch (error) {
       console.error("Error creating service:", error);
+    }
+  };
+
+  const [services, setServices] = useState([]);
+
+  const fetchServices = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/services");
+      setServices(res.data.data);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    }
+  };
+
+  const deleteService = async (id) => {
+    const token = localStorage.getItem("token");
+
+    if (!window.confirm("Delete this service?")) return;
+
+    try {
+      await axios.delete(`http://localhost:5000/api/services/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      alert("Service deleted");
+      fetchServices();
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -128,7 +158,37 @@ function AdminDashboard() {
       </div>
 
       {/* All Requests */}
-      <h4>All Service Requests</h4>
+      <h4 className="mt-4">Manage Services</h4>
+
+      <table className="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Charge</th>
+            <th>Time</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {services.map((service) => (
+            <tr key={service._id}>
+              <td>{service.name}</td>
+              <td>₹{service.serviceCharge}</td>
+              <td>{service.estimatedTime}</td>
+
+              <td>
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={() => deleteService(service._id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       {requests.length === 0 ? (
         <p>No requests available</p>

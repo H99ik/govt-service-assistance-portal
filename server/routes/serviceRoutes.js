@@ -24,4 +24,7 @@ router.get("/my-assigned", protect, agentMiddleware, serviceController.getMyAssi
 router.put("/update-status/:id", protect, agentMiddleware, serviceController.updateRequestStatus);
 router.post("/upload/:requestId", protect, upload.single("file"), serviceController.uploadDocument);
 
+//delete service: admin route
+router.delete("/:id", protect, adminMiddleware, serviceController.deleteService);
+
 module.exports = router;

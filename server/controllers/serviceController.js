@@ -188,6 +188,30 @@ exports.uploadDocument = async (req, res) => {
   }
 };
 
+exports.deleteService = async (req, res) => {
+  try {
+    const service = await Service.findById(req.params.id);
+
+    if (!service) {
+      return res.status(404).json({
+        message: "Service not found",
+      });
+    }
+
+    await service.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: "Service deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Delete failed",
+      error: error.message,
+    });
+  }
+};
+
 // Get All Active service
 exports.getMyRequests = async (req, res) => {
   try {

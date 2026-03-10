@@ -134,19 +134,33 @@ function MyRequests() {
                 <div className="mt-3">
                   <strong>Uploaded Documents:</strong>
 
-                  <div className="d-flex gap-3 mt-2 flex-wrap">
-                    {req.documents.map((doc, index) => (
-                      <img
-                        key={index}
-                        src={`http://localhost:5000/uploads/${doc}`}
-                        alt="uploaded document"
-                        width="100"
-                        style={{
-                          borderRadius: "6px",
-                          border: "1px solid #ddd",
-                        }}
-                      />
-                    ))}
+                  <div className="d-flex gap-2 mt-2 flex-wrap">
+                    {req.documents.map((doc, index) => {
+                      const fileUrl = `http://localhost:5000/uploads/${doc}`;
+
+                      return (
+                        <div key={index} className="d-flex gap-2">
+                          {/* Preview Button */}
+                          <a
+                            href={fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-sm btn-outline-primary"
+                          >
+                            👁 Preview
+                          </a>
+
+                          {/* Download Button */}
+                          <a
+                            href={fileUrl}
+                            download
+                            className="btn btn-sm btn-outline-success"
+                          >
+                            ⬇ Download
+                          </a>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}

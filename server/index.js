@@ -4,6 +4,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 
 // Load environment variables
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/uploads", express.static("uploads"));
+app.use("/api/notifications", notificationRoutes);
 
 
 // Basic Route

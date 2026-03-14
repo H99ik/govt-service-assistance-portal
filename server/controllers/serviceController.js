@@ -1,5 +1,6 @@
 const ServiceRequest = require("../models/ServiceRequest");
 const Service = require("../models/Service");
+const Notification = require("../models/Notification");
 
 exports.getActiveServices = async (req, res) => {
   try {
@@ -35,6 +36,11 @@ exports.createRequest = async (req, res) => {
     });
 
     await newRequest.save();
+
+    await Notification.create({
+      user: req.user._id,
+      message: `Your service request has been submitted successfully for ${existingService.name}.`,
+    });
 
     res.status(201).json({
       success: true,

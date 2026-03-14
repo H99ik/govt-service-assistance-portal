@@ -48,7 +48,6 @@ function Services() {
   return (
     <div className="container mt-5" style={{ maxWidth: "1000px" }}>
       <h2 className="fw-bold text-center mb-4">Government Services</h2>
-
       <div className="row g-4">
         {services.map((service) => (
           <div className="col-md-6 col-lg-4" key={service._id}>

@@ -21,7 +21,7 @@ function AdminDashboard() {
 
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/auth/all-requests",
+        "http://localhost:5000/api/services/admin-requests",
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -96,6 +96,27 @@ function AdminDashboard() {
       fetchServices();
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const updateStatus = async (id, status) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      await axios.put(
+        `http://localhost:5000/api/services/update-status/${id}`,
+        { status },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      alert("Status updated successfully");
+
+      // refresh admin requests
+      fetchRequests();
+    } catch (error) {
+      console.error("Status update error:", error);
     }
   };
 
@@ -204,6 +225,42 @@ function AdminDashboard() {
             <p>
               <strong>Status:</strong> {req.status}
             </p>
+
+            {req.documents?.length > 0 && (
+              <div className="mb-2">
+                <strong>Uploaded Documents:</strong>
+
+                {req.documents.map((doc, index) => (
+                  <div key={index}>
+                    <a
+                      href={`http://localhost:5000/uploads/${doc}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      View Document {index + 1}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {req.status === "SubmittedToAdmin" && (
+              <div className="mt-2">
+                <button
+                  className="btn btn-success me-2"
+                  onClick={() => updateStatus(req._id, "Completed")}
+                >
+                  Approve & Generate Certificate
+                </button>
+
+                <button
+                  className="btn btn-danger"
+                  onClick={() => updateStatus(req._id, "Rejected")}
+                >
+                  Reject
+                </button>
+              </div>
+            )}
           </div>
         ))
       )}

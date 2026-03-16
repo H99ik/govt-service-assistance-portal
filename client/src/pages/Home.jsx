@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
 function Home() {
+  const token = localStorage.getItem("token");
+
   return (
     <div className="container-fluid mt-5">
       {/* Hero Section */}
@@ -22,9 +24,15 @@ function Home() {
           <Link to="/services" className="btn btn-primary me-2">
             Browse Services
           </Link>
+          {token ? (
           <Link to="/my-requests" className="btn btn-outline-primary">
             Track Application
           </Link>
+         ) : (
+          <Link to="/login" className="btn btn-outline-primary">
+            Login to Apply
+          </Link>
+        )}
         </div>
       </div>
     </div>

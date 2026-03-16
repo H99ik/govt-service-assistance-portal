@@ -21,8 +21,10 @@ router.post("/", protect, adminMiddleware, serviceController.createService);
 router.get("/pending", protect, agentMiddleware, serviceController.getPendingRequests);
 router.put("/accept/:id", protect, agentMiddleware, serviceController.acceptRequest);
 router.get("/my-assigned", protect, agentMiddleware, serviceController.getMyAssignedRequests);
-router.put("/update-status/:id", protect, agentMiddleware, serviceController.updateRequestStatus);
+router.put("/update-status/:id", protect, serviceController.updateRequestStatus);
 router.post("/upload/:requestId", protect, upload.single("file"), serviceController.uploadDocument);
+router.get("/admin-requests", protect, adminMiddleware, serviceController.getRequestsForAdmin);
+
 
 //delete service: admin route
 router.delete("/:id", protect, adminMiddleware, serviceController.deleteService);

@@ -1,6 +1,11 @@
 const ServiceRequest = require("../models/ServiceRequest");
 const Service = require("../models/Service");
 const Notification = require("../models/Notification");
+const PDFDocument = require("pdfkit");
+const QRCode = require("qrcode");
+const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
+const path = require("path");
 
 exports.getActiveServices = async (req, res) => {
   try {
@@ -218,6 +223,50 @@ exports.deleteService = async (req, res) => {
   }
 };
 
+const generateCertificate = async (request) => {
+  const certificateId = "CERT-" + uuidv4().slice(0, 8);
+
+  const filePath = path.join(
+    __dirname,
+    "..",
+    "uploads",
+    "certificates",
+    `${certificateId}.pdf`,
+  );
+
+  const qrData = `http://localhost:5000/api/verify/${certificateId}`;
+  const qrImage = await QRCode.toDataURL(qrData);
+
+  const doc = new PDFDocument();
+
+  doc.pipe(fs.createWriteStream(filePath));
+
+  doc.fontSize(20).text("Government Service Portal", { align: "center" });
+  doc.moveDown();
+
+  doc.fontSize(16).text("Certificate of Approval", { align: "center" });
+  doc.moveDown();
+
+  doc.fontSize(12).text(`Citizen: ${request.citizen.name}`);
+  doc.text(`Service: ${request.serviceType.name}`);
+  doc.text(`Certificate ID: ${certificateId}`);
+  doc.text(`Date: ${new Date().toLocaleDateString()}`);
+
+  doc.moveDown();
+
+  doc.image(qrImage, {
+    fit: [100, 100],
+    align: "center",
+  });
+
+  doc.end();
+
+  return {
+    certificateId,
+    certificateUrl: `uploads/certificates/${certificateId}.pdf`,
+  };
+};
+
 // Get All Active service
 exports.getMyRequests = async (req, res) => {
   try {
@@ -240,13 +289,21 @@ exports.getMyRequests = async (req, res) => {
 
 exports.updateRequestStatus = async (req, res) => {
   try {
-    const request = await ServiceRequest.findById(req.params.id);
+    const request = await ServiceRequest.findById(req.params.id)
+      .populate("citizen", "name email")
+      .populate("serviceType");
 
     if (!request) {
       return res.status(404).json({ message: "Request not found" });
     }
 
-    const allowedStatuses = ["Pending", "In Progress", "Completed", "Rejected"];
+    const allowedStatuses = [
+      "Pending",
+      "In Progress",
+      "SubmittedToAdmin",
+      "Completed",
+      "Rejected",
+    ];
 
     if (!allowedStatuses.includes(req.body.status)) {
       return res.status(400).json({
@@ -254,7 +311,30 @@ exports.updateRequestStatus = async (req, res) => {
       });
     }
 
+    // Agent cannot complete directly
+    if (req.body.status === "Completed" && req.user.role !== "admin") {
+      return res.status(403).json({
+        message: "Only admin can complete the request",
+      });
+    }
+
+    // Agent submits to admin
+    if (req.body.status === "SubmittedToAdmin") {
+      if (!request.documents || request.documents.length === 0) {
+        return res.status(400).json({
+          message: "Documents must be uploaded before submitting to admin",
+        });
+      }
+    }
+
     request.status = req.body.status;
+
+    if (req.body.status === "Completed" && req.user.role === "admin") {
+      const cert = await generateCertificate(request);
+
+      request.certificateId = cert.certificateId;
+      request.certificateUrl = cert.certificateUrl;
+    }
 
     await request.save();
 
@@ -267,6 +347,27 @@ exports.updateRequestStatus = async (req, res) => {
     res.status(500).json({
       message: "Could not update status",
       error: err.message,
+    });
+  }
+};
+
+exports.getRequestsForAdmin = async (req, res) => {
+  try {
+    const requests = await ServiceRequest.find({
+      status: "SubmittedToAdmin",
+    })
+      .populate("citizen", "name email")
+      .populate("serviceType");
+
+    res.status(200).json({
+      success: true,
+      count: requests.length,
+      data: requests,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Could not fetch admin requests",
+      error: error.message,
     });
   }
 };

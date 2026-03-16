@@ -15,12 +15,20 @@ const ServiceRequestSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Pending", "In Progress", "Completed", "Rejected"],
+      enum: ["Pending", "In Progress", "SubmittedToAdmin", "Completed", "Rejected"],
       default: "Pending",
     },
     documents: [String], // Array of file paths from Multer
+
     description: String,
-    createdAt: { type: Date, default: Date.now },
+
+    certificateUrl: {
+      type: String,
+    },
+
+    certificateId: {
+      type: String,
+    },
   },
   { timestamps: true },
 );

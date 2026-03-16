@@ -62,7 +62,7 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
 
     // 3. Create and send JWT
-    const payload = { id: user._id, role: user.role };
+    const payload = { _id: user._id, role: user.role };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "8d",
     });

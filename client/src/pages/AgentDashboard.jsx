@@ -54,7 +54,7 @@ function AgentDashboard() {
     try {
       await axios.put(
         `http://localhost:5000/api/services/accept/${id}`,
-        {},
+        {status: "In Progress"},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -72,6 +72,9 @@ function AgentDashboard() {
   };
 
   const updateStatus = async (id, status) => {
+    if(status === "Completed"){
+      if (!window.confirm("Are you sure the documents are valid?")) return;
+    }
     const token = localStorage.getItem("token");
 
     try {
@@ -99,45 +102,43 @@ function AgentDashboard() {
       {requests.length === 0 ? (
         <p>No pending requests.</p>
       ) : (
-        requests
-          .filter((req) => req.status === "Pending")
-          .map((req) => (
-            <div key={req._id} className="card p-3 mb-3">
-              <h5>{req.serviceType?.name}</h5>
+        requests?.map((req) => (
+          <div key={req._id} className="card p-3 mb-3">
+            <h5>{req.serviceType?.name}</h5>
 
-              <p>
-                <strong>Description:</strong> {req.description}
-              </p>
+            <p>
+              <strong>Description:</strong> {req.description}
+            </p>
 
-              <p>
-                <strong>Citizen:</strong> {req.citizen?.name}
-              </p>
+            <p>
+              <strong>Citizen:</strong> {req.citizen?.name}
+            </p>
 
-              <p>
-                <strong>Status:</strong> {req.status}
-              </p>
+            <p>
+              <strong>Status:</strong> {req.status}
+            </p>
 
-              <div className="mt-2">
-                {req.status === "Pending" && (
-                  <button
-                    className="btn btn-success me-2"
-                    onClick={() => handleAccept(req._id)}
-                  >
-                    Accept
-                  </button>
-                )}
+            <div className="mt-2">
+              {req.status === "Pending" && (
+                <button
+                  className="btn btn-success me-2"
+                  onClick={() => handleAccept(req._id)}
+                >
+                  Accept
+                </button>
+              )}
 
-                {req.status === "In Progress" && (
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => updateStatus(req._id, "Completed")}
-                  >
-                    Mark Completed
-                  </button>
-                )}
-              </div>
+              {req.status === "In Progress" && (
+                <button
+                  className="btn btn-primary"
+                  onClick={() => updateStatus(req._id, "SubmittedToAdmin")}
+                >
+                  Submit to Admin
+                </button>
+              )}
             </div>
-          ))
+          </div>
+        ))
       )}
 
       <h3 className="mt-5">My Assigned Requests</h3>
@@ -163,22 +164,22 @@ function AgentDashboard() {
 
             {req.status === "In Progress" && (
               <>
-              <button
-                className="btn btn-primary"
-                onClick={() => updateStatus(req._id, "Completed")}
-              >
-                Mark Completed
-              </button>
-              <button
-                className="btn btn-secondary ms-2"
-                onClick={() => updateStatus(req._id, "Rejected")}
-              >
-                Reject
-              </button>
-              
-             {req.status === "Rejected" && (
-              <span className="badge bg-danger">Rejected</span>
-             )}
+                <button
+                  className="btn btn-primary"
+                  onClick={() => updateStatus(req._id, "SubmittedToAdmin")}
+                >
+                  Mark Completed
+                </button>
+                <button
+                  className="btn btn-secondary ms-2"
+                  onClick={() => updateStatus(req._id, "Rejected")}
+                >
+                  Reject
+                </button>
+
+                {req.status === "Rejected" && (
+                  <span className="badge bg-danger">Rejected</span>
+                )}
               </>
             )}
           </div>

@@ -95,7 +95,7 @@ exports.getPendingRequests = async (req, res) => {
   try {
     const requests = await ServiceRequest.find({
       status: "Pending",
-      agent: { $exists: false },
+      $or: [{agent: null}, {agent: { $exists: false }}],
     })
       .populate("citizen", "name email")
       .populate("serviceType");
@@ -247,8 +247,8 @@ const generateCertificate = async (request) => {
   doc.fontSize(16).text("Certificate of Approval", { align: "center" });
   doc.moveDown();
 
-  doc.fontSize(12).text(`Citizen: ${request.citizen.name}`);
-  doc.text(`Service: ${request.serviceType.name}`);
+  doc.fontSize(12).text(`Citizen: ${request.citizen?.name}`);
+  doc.text(`Service: ${request.serviceType?.name}`);
   doc.text(`Certificate ID: ${certificateId}`);
   doc.text(`Date: ${new Date().toLocaleDateString()}`);
 
@@ -357,7 +357,8 @@ exports.getRequestsForAdmin = async (req, res) => {
       status: "SubmittedToAdmin",
     })
       .populate("citizen", "name email")
-      .populate("serviceType");
+      .populate("serviceType")
+      .select("+documents"); // exclude heavy fields
 
     res.status(200).json({
       success: true,

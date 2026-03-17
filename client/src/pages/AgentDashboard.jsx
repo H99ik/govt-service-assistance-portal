@@ -54,7 +54,7 @@ function AgentDashboard() {
     try {
       await axios.put(
         `http://localhost:5000/api/services/accept/${id}`,
-        {status: "In Progress"},
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -72,7 +72,7 @@ function AgentDashboard() {
   };
 
   const updateStatus = async (id, status) => {
-    if(status === "Completed"){
+    if (status === "Completed") {
       if (!window.confirm("Are you sure the documents are valid?")) return;
     }
     const token = localStorage.getItem("token");
@@ -118,6 +118,24 @@ function AgentDashboard() {
               <strong>Status:</strong> {req.status}
             </p>
 
+            {req.documents?.length > 0 && (
+              <div className="mb-2">
+                <strong>Uploaded Documents:</strong>
+
+                {req.documents.map((doc, index) => (
+                  <div key={index}>
+                    <a
+                      href={`http://localhost:5000/uploads/${doc}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      View Document {index + 1}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div className="mt-2">
               {req.status === "Pending" && (
                 <button
@@ -162,13 +180,31 @@ function AgentDashboard() {
               <strong>Status:</strong> {req.status}
             </p>
 
+            {req.documents?.length > 0 && (
+              <div className="mb-2">
+                <strong>Uploaded Documents:</strong>
+
+                {req.documents.map((doc, index) => (
+                  <div key={index}>
+                    <a
+                      href={`http://localhost:5000/uploads/${doc}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      View Document {index + 1}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {req.status === "In Progress" && (
               <>
                 <button
                   className="btn btn-primary"
                   onClick={() => updateStatus(req._id, "SubmittedToAdmin")}
                 >
-                  Mark Completed
+                  Submit to Admin
                 </button>
                 <button
                   className="btn btn-secondary ms-2"

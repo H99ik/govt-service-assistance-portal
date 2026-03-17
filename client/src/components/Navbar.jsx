@@ -85,6 +85,18 @@ function Navbar() {
               My Requests
             </Link>
 
+            {user?.role === "agent" && (
+              <Link to="/agent-dashboard" className="nav-link text-white">
+                Agent Dashboard
+              </Link>
+            )}
+
+            {user?.role === "admin" && (
+              <Link to="/admin-dashboard" className="nav-link text-white">
+                Admin Dashboard
+              </Link>
+            )}
+
             {/* Notification */}
             <div className="position-relative" style={{ cursor: "pointer" }}>
               <i className="bi bi-bell-fill text-white fs-5"></i>

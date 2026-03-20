@@ -15,12 +15,24 @@ const ServiceRequestSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Pending", "In Progress", "SubmittedToAdmin", "Completed", "Rejected"],
+      enum: [
+        "Pending",
+        "In Progress",
+        "SubmittedToAdmin",
+        "Completed",
+        "Rejected",
+      ],
       default: "Pending",
     },
     documents: [String], // Array of file paths from Multer
 
     description: String,
+
+    trackingId: {
+      type: String,
+      unique: true,
+      default: () => "TRK-" + uuidv4().slice(0, 8).toUpperCase(),
+    },
 
     certificateUrl: {
       type: String,

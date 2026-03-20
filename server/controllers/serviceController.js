@@ -20,6 +20,8 @@ exports.getActiveServices = async (req, res) => {
   }
 };
 
+const trackingId = "TRK-" + uuidv4().slice(0, 8);
+
 exports.createRequest = async (req, res) => {
   try {
     const { serviceType, description } = req.body;
@@ -38,6 +40,7 @@ exports.createRequest = async (req, res) => {
       citizen: req.user._id,
       serviceType,
       description,
+      trackingId,
     });
 
     await newRequest.save();
@@ -95,7 +98,7 @@ exports.getPendingRequests = async (req, res) => {
   try {
     const requests = await ServiceRequest.find({
       status: "Pending",
-      $or: [{agent: null}, {agent: { $exists: false }}],
+      $or: [{ agent: null }, { agent: { $exists: false } }],
     })
       .populate("citizen", "name email")
       .populate("serviceType");
@@ -224,7 +227,7 @@ exports.deleteService = async (req, res) => {
 };
 
 const generateCertificate = async (request) => {
-  const certificateId = "CERT-" + uuidv4().slice(0, 8);
+  const certificateId = "CERT-" + uuidv4().slice(0, 8).toUpperCase();
 
   const filePath = path.join(
     __dirname,
@@ -237,23 +240,56 @@ const generateCertificate = async (request) => {
   const qrData = `http://localhost:5000/api/verify/${certificateId}`;
   const qrImage = await QRCode.toDataURL(qrData);
 
-  const doc = new PDFDocument();
+  const doc = new PDFDocument({
+    size: "A4",
+    margin: 50,
+  });
 
   doc.pipe(fs.createWriteStream(filePath));
 
-  doc.fontSize(20).text("Government Service Portal", { align: "center" });
-  doc.moveDown();
+  // BORDER
+  doc.rect(20, 20, 555, 800).stroke();
 
-  doc.fontSize(16).text("Certificate of Approval", { align: "center" });
-  doc.moveDown();
+  // HEADER
+  doc.fontSize(20).text("GOVERNMENT OF INDIA", { align: "center" });
 
-  doc.fontSize(12).text(`Citizen: ${request.citizen?.name}`);
-  doc.text(`Service: ${request.serviceType?.name}`);
+  doc.fontSize(14).text("Government Service Portal", { align: "center" });
+
+  doc.moveDown(2);
+
+  // TITLE
+  doc.fontSize(18).text("CERTIFICATE OF APPROVAL", {
+    align: "center",
+    underline: true,
+  });
+
+  doc.moveDown(2);
+
+  // BODY TEXT
+  doc
+    .fontSize(12)
+    .text(
+      `This is to certify that the request submitted by the citizen has been successfully verified and approved by the authority.`,
+      { align: "center" },
+    );
+
+  doc.moveDown(2);
+
+  // DETAILS
+  doc.fontSize(12).text(`Citizen Name: ${request.citizen.name}`);
+  doc.text(`Service: ${request.serviceType.name}`);
+  doc.text(`Tracking ID: ${request.trackingId}`);
   doc.text(`Certificate ID: ${certificateId}`);
   doc.text(`Date: ${new Date().toLocaleDateString()}`);
 
-  doc.moveDown();
+  doc.moveDown(3);
 
+  // SIGNATURE
+  doc.text("Authorized Signature", { align: "right" });
+
+  doc.moveDown(2);
+
+  // QR CODE CENTER
   doc.image(qrImage, {
     fit: [100, 100],
     align: "center",
@@ -265,6 +301,31 @@ const generateCertificate = async (request) => {
     certificateId,
     certificateUrl: `uploads/certificates/${certificateId}.pdf`,
   };
+};
+
+exports.verifyCertificate = async (req, res) => {
+  try {
+    const cert = await ServiceRequest.findOne({
+      certificateId: req.params.certificateId,
+    }).populate("citizen serviceType");
+
+    if (!cert) {
+      return res.status(404).json({
+        success: false,
+        message: "Invalid Certificate",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: cert,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Verification failed",
+      error: error.message,
+    });
+  }
 };
 
 // Get All Active service

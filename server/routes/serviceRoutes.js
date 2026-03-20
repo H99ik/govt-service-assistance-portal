@@ -24,6 +24,7 @@ router.get("/my-assigned", protect, agentMiddleware, serviceController.getMyAssi
 router.put("/update-status/:id", protect, serviceController.updateRequestStatus);
 router.post("/upload/:requestId", protect, upload.single("file"), serviceController.uploadDocument);
 router.get("/admin-requests", protect, adminMiddleware, serviceController.getRequestsForAdmin);
+router.get("/verify/:certificateId", serviceController.verifyCertificate);
 
 
 //delete service: admin route

@@ -40,6 +40,25 @@ function Navbar() {
     navigate("/login");
   };
 
+  const handleNotificationClick = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      await axios.put(
+        "http://localhost:5000/api/notifications/mark-read",
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      // clear badge instantly
+      setNotifications([]);
+    } catch (error) {
+      console.error("Error marking notifications:", error);
+    }
+  };
+
   return (
     <nav
       className="navbar navbar-expand-lg px-4"
@@ -99,7 +118,31 @@ function Navbar() {
 
             {/* Notification */}
             <div className="position-relative" style={{ cursor: "pointer" }}>
-              <i className="bi bi-bell-fill text-white fs-5"></i>
+              <div className="dropdown">
+                <i
+                  className="bi bi-bell-fill text-white fs-5"
+                  data-bs-toggle="dropdown"
+                  onClick={handleNotificationClick}
+                  style={{ cursor: "pointer" }}
+                ></i>
+
+                <ul className="dropdown-menu dropdown-menu-end p-2">
+                  {notifications.filter((n) => !n.isRead).length === 0 ? (
+                    <li>No notifications</li>
+                  ) : (
+                    notifications.map((n, index) => (
+                      <li
+                        key={index}
+                        className={`small mb-1 ${!n.isRead ? "fw-bold" : "text-muted"}`}
+                      >
+                        {n.message}
+                        <br />
+                        <small>{new Date(n.createdAt).toLocaleString()}</small>
+                      </li>
+                    ))
+                  )}
+                </ul>
+              </div>
 
               {notifications.length > 0 && (
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">

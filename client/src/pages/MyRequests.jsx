@@ -92,6 +92,8 @@ function MyRequests() {
                   <p className="text-muted mb-0">
                     {req.description || "Requested via portal"}
                   </p>
+
+                  <p className="badge bg-dark">Tracking ID: {req.trackingId}</p>
                 </div>
 
                 <span
@@ -163,6 +165,16 @@ function MyRequests() {
                     })}
                   </div>
                 </div>
+              )}
+
+              {req.status === "Completed" && req.certificateUrl && (
+                <a
+                  href={`http://localhost:5000/${req.certificateUrl}`}
+                  target="_blank"
+                  className="btn btn-success mt-2"
+                >
+                  Download Certificate
+                </a>
               )}
             </div>
           </div>

@@ -226,6 +226,8 @@ function AdminDashboard() {
               <strong>Status:</strong> {req.status}
             </p>
 
+            <p className="badge bg-dark">Tracking ID: {req.trackingId}</p>
+
             {req.documents?.length > 0 && (
               <div className="mb-2">
                 <strong>Uploaded Documents:</strong>

@@ -246,23 +246,25 @@ function AdminDashboard() {
               </div>
             )}
 
-            {req.status === "SubmittedToAdmin" && (
-              <div className="mt-2">
-                <button
-                  className="btn btn-success me-2"
-                  onClick={() => updateStatus(req._id, "Completed")}
-                >
-                  Approve & Generate Certificate
-                </button>
+            {(req.status === "In Progress" ||
+              req.status === "SubmittedToAdmin") &&
+              req.documents?.length > 0 && (
+                <div className="mt-2">
+                  <button
+                    className="btn btn-success me-2"
+                    onClick={() => updateStatus(req._id, "Completed")}
+                  >
+                    Approve & Generate Certificate
+                  </button>
 
-                <button
-                  className="btn btn-danger"
-                  onClick={() => updateStatus(req._id, "Rejected")}
-                >
-                  Reject
-                </button>
-              </div>
-            )}
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => updateStatus(req._id, "Rejected")}
+                  >
+                    Reject
+                  </button>
+                </div>
+              )}
           </div>
         ))
       )}

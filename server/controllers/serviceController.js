@@ -20,8 +20,6 @@ exports.getActiveServices = async (req, res) => {
   }
 };
 
-const trackingId = "TRK-" + uuidv4().slice(0, 8);
-
 exports.createRequest = async (req, res) => {
   try {
     const { serviceType, description } = req.body;
@@ -36,14 +34,40 @@ exports.createRequest = async (req, res) => {
       return res.status(404).json({ message: "Service not found" });
     }
 
+    // generate unique tracking id INSIDE function
+    const trackingId = "TRK-" + uuidv4().slice(0, 8).toUpperCase();
+
+    // default flow
+    let status = "Pending";
+
+    // ADMIN AUTO APPROVE
+    if (req.user.role === "admin") {
+      status = "In Progress";
+    }
+
     const newRequest = new ServiceRequest({
       citizen: req.user._id,
       serviceType,
       description,
       trackingId,
+      status,
     });
 
     await newRequest.save();
+
+    // IF ADMIN → generate certificate immediately
+    if (req.user.role === "admin") {
+      const populatedRequest = await ServiceRequest.findById(newRequest._id)
+        .populate("citizen")
+        .populate("serviceType");
+
+      const cert = await generateCertificate(populatedRequest);
+
+      newRequest.certificateId = cert.certificateId;
+      newRequest.certificateUrl = cert.certificateUrl;
+
+      await newRequest.save();
+    }
 
     await Notification.create({
       user: req.user._id,
@@ -237,7 +261,7 @@ const generateCertificate = async (request) => {
     `${certificateId}.pdf`,
   );
 
-  const qrData = `http://localhost:5000/api/verify/${certificateId}`;
+  const qrData = `http://localhost:5173/verify/${certificateId}`;
   const qrImage = await QRCode.toDataURL(qrData);
 
   const doc = new PDFDocument({
@@ -388,6 +412,15 @@ exports.updateRequestStatus = async (req, res) => {
       }
     }
 
+    // ADMIN DIRECT COMPLETE (from In Progress)
+    if (req.user.role === "admin" && req.body.status === "Completed") {
+      if (!request.documents || request.documents.length === 0) {
+        return res.status(400).json({
+          message: "Upload documents before completing request",
+        });
+      }
+    }
+
     request.status = req.body.status;
 
     if (req.body.status === "Completed" && req.user.role === "admin") {
@@ -415,7 +448,7 @@ exports.updateRequestStatus = async (req, res) => {
 exports.getRequestsForAdmin = async (req, res) => {
   try {
     const requests = await ServiceRequest.find({
-      status: "SubmittedToAdmin",
+      status: {$in: ["SubmittedToAdmin", "In Progress"]},
     })
       .populate("citizen", "name email")
       .populate("serviceType")

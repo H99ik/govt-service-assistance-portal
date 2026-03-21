@@ -7,6 +7,7 @@ import MyRequests from "./pages/MyRequests";
 import AgentDashboard from "./pages/AgentDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Home from "./pages/Home";
+import VerifyCertificate from "./pages/VerifyCertificate";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/my-requests" element={<MyRequests />} />
         <Route path="/agent-dashboard" element={<AgentDashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/verify/:certificateId" element={<VerifyCertificate />} />
       </Routes>
     </>
   );

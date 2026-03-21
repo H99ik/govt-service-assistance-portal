@@ -171,9 +171,10 @@ function MyRequests() {
                 <a
                   href={`http://localhost:5000/${req.certificateUrl}`}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="btn btn-success mt-2"
                 >
-                  Download Certificate
+                  View Certificate
                 </a>
               )}
             </div>

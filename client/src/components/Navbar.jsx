@@ -12,6 +12,8 @@ function Navbar() {
   const fetchNotifications = async () => {
     const token = localStorage.getItem("token");
 
+    if (!token) return;
+
     try {
       const res = await axios.get(
         "http://localhost:5000/api/notifications/my",
@@ -31,8 +33,13 @@ function Navbar() {
   useEffect(() => {
     if (token) {
       fetchNotifications();
+      const interval = setInterval(() => {
+        fetchNotifications();
+      }, 5000); // every 5 sec
+
+      return () => clearInterval(interval);
     }
-  }, []);
+  }, [localStorage.getItem("token")]); // refetch when token changes
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -53,7 +60,8 @@ function Navbar() {
       );
 
       // clear badge instantly
-      setNotifications([]);
+      //setNotifications([]);
+      fetchNotifications(); // Refresh notifications to update the list and badge
     } catch (error) {
       console.error("Error marking notifications:", error);
     }
@@ -62,7 +70,15 @@ function Navbar() {
   return (
     <nav
       className="navbar navbar-expand-lg px-4"
-      style={{ backgroundColor: "#0B3D91", color: "white" }}
+      style={{
+        backgroundColor: "#0B3D91",
+        position: "fixed",
+        top: "0",
+        width: "100%",
+        color: "white",
+        zIndex: "1000",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+      }}
     >
       <Link
         className="navbar-brand fw-bold text-white d-flex align-items-center gap-2"
@@ -126,14 +142,27 @@ function Navbar() {
                   style={{ cursor: "pointer" }}
                 ></i>
 
-                <ul className="dropdown-menu dropdown-menu-end p-2">
-                  {notifications.filter((n) => !n.isRead).length === 0 ? (
+                <ul
+                  className="dropdown-menu dropdown-menu-end shadow p-2"
+                  style={{
+                    width: "320px",
+                    maxHeight: "250px",
+                    overflowY: "auto",
+                    overflowX: "hidden",
+                    wordWrap: "break-word",
+                  }}
+                >
+                  {notifications.length === 0 ? (
                     <li>No notifications</li>
                   ) : (
                     notifications.map((n, index) => (
                       <li
                         key={index}
-                        className={`small mb-1 ${!n.isRead ? "fw-bold" : "text-muted"}`}
+                        className={`small mb-2 border-bottom p-2 ${!n.isRead ? "fw-bold" : "text-muted"}`}
+                        style={{
+                          whiteSpace: "normal",
+                          wordBreak: "break-word",
+                        }}
                       >
                         {n.message}
                         <br />
@@ -144,9 +173,9 @@ function Navbar() {
                 </ul>
               </div>
 
-              {notifications.length > 0 && (
+              {notifications.filter((n) => !n.isRead).length > 0 && (
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  {notifications.length}
+                  {notifications.filter((n) => !n.isRead).length}
                 </span>
               )}
             </div>

@@ -8,11 +8,13 @@ import AgentDashboard from "./pages/AgentDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Home from "./pages/Home";
 import VerifyCertificate from "./pages/VerifyCertificate";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <>
       <Navbar />
+      <div style={{marginTop:"70px"}}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
@@ -23,6 +25,8 @@ function App() {
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/verify/:certificateId" element={<VerifyCertificate />} />
       </Routes>
+      </div>
+      <Footer />
     </>
   );
 }

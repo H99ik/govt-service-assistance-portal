@@ -40,23 +40,26 @@ function Login() {
   };
 
   return (
-    <div className="container mt-5">
-      <h2>Login</h2>
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: "80vh", background: "#f5f7fa" }}
+    >
+      <div className="card shadow p-4" style={{ width: "360px" }}>
+        <h3 className="text-center mb-3 fw-bold">Login</h3>
 
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <input
-            type="email"
-            name="email"
-            className="form-control"
-            placeholder="Email"
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <input
+              type="email"
+              name="email"
+              className="form-control"
+              placeholder="Email"
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <div className="mb-3 position-relative">
-            
+          <div className="mb-3 position-relative">
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -65,8 +68,11 @@ function Login() {
               onChange={handleChange}
               required
             />
+
             <i
-              className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"} position-absolute`}
+              className={`bi ${
+                showPassword ? "bi-eye-slash" : "bi-eye"
+              } position-absolute`}
               style={{
                 top: "50%",
                 right: "15px",
@@ -75,10 +81,19 @@ function Login() {
               }}
               onClick={() => setShowPassword(!showPassword)}
             ></i>
-        </div>
+          </div>
 
-        <button className="btn btn-success w-100">Login</button>
-      </form>
+          <button className="btn btn-success w-100">Login</button>
+        </form>
+
+        {/* 🔥 Switch */}
+        <p className="text-center mt-3 small">
+          Don’t have an account?{" "}
+          <a href="/register" className="fw-bold text-primary">
+            Register
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

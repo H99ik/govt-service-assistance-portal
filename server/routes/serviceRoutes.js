@@ -26,10 +26,12 @@ router.put("/update-status/:id", protect, serviceController.updateRequestStatus)
 router.post("/upload/:requestId", protect, upload.single("file"), serviceController.uploadDocument);
 router.get("/admin-requests", protect, adminMiddleware, serviceController.getRequestsForAdmin);
 router.get("/verify/:certificateId", serviceController.verifyCertificate);
+router.get("/track/:trackingId", serviceController.trackRequest);
 router.get("/download/:filename",protect, (req, res) => {
   const filePath = path.join(__dirname, "../uploads/certificates", req.params.filename);
   res.download(filePath);
 });
+router.get("/stats", serviceController.getStats);
 
 
 //delete service: admin route

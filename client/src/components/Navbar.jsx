@@ -72,8 +72,7 @@ function Navbar() {
       className="navbar navbar-expand-lg px-4"
       style={{
         backgroundColor: "#0B3D91",
-        position: "fixed",
-        top: "0",
+        position: "relative",
         width: "100%",
         color: "white",
         zIndex: "1000",
@@ -225,15 +224,9 @@ function Navbar() {
             </div>
           </>
         ) : (
-          <>
-            <Link to="/login" className="btn btn-success">
-              Login
-            </Link>
-
-            <Link to="/register" className="btn btn-primary">
-              Register
-            </Link>
-          </>
+          <Link to="/login" className="btn btn-success px-4">
+            Sign In / Sign Up
+          </Link>
         )}
       </div>
     </nav>

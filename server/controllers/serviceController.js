@@ -6,6 +6,7 @@ const QRCode = require("qrcode");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 const path = require("path");
+const User = require("../models/User");
 
 exports.getActiveServices = async (req, res) => {
   try {
@@ -448,7 +449,7 @@ exports.updateRequestStatus = async (req, res) => {
 exports.getRequestsForAdmin = async (req, res) => {
   try {
     const requests = await ServiceRequest.find({
-      status: {$in: ["SubmittedToAdmin", "In Progress"]},
+      status: { $in: ["SubmittedToAdmin", "In Progress"] },
     })
       .populate("citizen", "name email")
       .populate("serviceType")
@@ -464,5 +465,46 @@ exports.getRequestsForAdmin = async (req, res) => {
       message: "Could not fetch admin requests",
       error: error.message,
     });
+  }
+};
+
+exports.trackRequest = async (req, res) => {
+  try {
+    const request = await ServiceRequest.findOne({
+      trackingId: req.params.trackingId,
+    }).populate("serviceType");
+
+    if (!request) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.json(request);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// 🔥 Dashboard Stats
+exports.getStats = async (req, res) => {
+  try {
+    const totalRequests = await ServiceRequest.countDocuments();
+    const completed = await ServiceRequest.countDocuments({
+      status: "Completed",
+    });
+
+    const pending = await ServiceRequest.countDocuments({ status: "Pending" });
+    const inProgress = await ServiceRequest.countDocuments({ status: "In Progress" });
+
+    const users = await User.countDocuments();
+
+    res.json({
+      totalRequests,
+      completed,
+      pending,
+      inProgress,
+      users,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

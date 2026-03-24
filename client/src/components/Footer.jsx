@@ -37,8 +37,10 @@ function Footer() {
             </div>
 
             <p className="small mb-0">
-              © 2026 Govt Portal. All rights reserved.
+              © {new Date().getFullYear()} Government Service Portal. All rights
+              reserved.
             </p>
+            <small style={{ opacity: 0.8 }}>Developed by HardikGiri</small>
           </div>
         </div>
       </div>

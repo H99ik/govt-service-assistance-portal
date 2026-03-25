@@ -7,6 +7,7 @@ const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 const path = require("path");
 const User = require("../models/User");
+const sendSMS = require("../utils/sendSMS");
 
 exports.getActiveServices = async (req, res) => {
   try {
@@ -74,6 +75,15 @@ exports.createRequest = async (req, res) => {
       user: req.user._id,
       message: `Your service request has been submitted successfully for ${existingService.name}.`,
     });
+
+    // 🔥 Get user phone from DB
+    const user = await User.findById(req.user._id);
+
+    // 🔥 Send SMS automatically
+    await sendSMS(
+      user.phone,
+      `Your request submitted successfully. Tracking ID: ${newRequest.trackingId}`,
+    );
 
     res.status(201).json({
       success: true,
@@ -493,7 +503,9 @@ exports.getStats = async (req, res) => {
     });
 
     const pending = await ServiceRequest.countDocuments({ status: "Pending" });
-    const inProgress = await ServiceRequest.countDocuments({ status: "In Progress" });
+    const inProgress = await ServiceRequest.countDocuments({
+      status: "In Progress",
+    });
 
     const users = await User.countDocuments();
 

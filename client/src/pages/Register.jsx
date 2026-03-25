@@ -9,6 +9,7 @@ function Register() {
     name: "",
     email: "",
     password: "",
+    phone: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +45,7 @@ function Register() {
     try {
       await axios.post("http://localhost:5000/api/auth/register", formData);
       alert("Registration successful!");
-      navigate("/login");
+      navigate("/verify-otp");
     } catch (error) {
       alert(error.response?.data?.message || "Registration failed");
     }
@@ -76,6 +77,17 @@ function Register() {
               name="email"
               className="form-control"
               placeholder="Email"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="mb-3">
+            <input
+              type="text"
+              name="phone"
+              className="form-control"
+              placeholder="Mobile Number"
               onChange={handleChange}
               required
             />

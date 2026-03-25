@@ -39,7 +39,9 @@ function Services() {
         },
       );
 
-      alert("Service request submitted!");
+      alert("Service request submitted! SMS sent 📱");
+      setSelectedService(null);
+      setPhone("");
     } catch (error) {
       alert(error.response?.data?.message || "Request failed");
     }

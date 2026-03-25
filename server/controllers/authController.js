@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, adminSecret, agentSecret } = req.body;
+    const { name, email, password, phone, adminSecret, agentSecret } = req.body;
 
     // 1. Check if user already exists
     let user = await User.findOne({ email });
@@ -27,19 +27,33 @@ exports.register = async (req, res) => {
       role = "agent";
     }
 
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+
     // 5. Create user
     user = new User({
       name,
       email,
       password: hashedPassword,
+      phone,
       role,
+      otp,
+      otpExpires: otpExpiry,
+      isVerified: false,
     });
 
     await user.save();
 
+    const sendSMS = require("../utils/sendSMS");
+
+    await sendSMS(
+      phone,
+      `Your OTP for registration is ${otp}. It is valid for 10 minutes.`,
+    );
+
     res.status(201).json({
       success: true,
-      message: "User created successfully",
+      message: "OTP sent to your mobile. Please verify your account.",
       role: user.role,
     });
   } catch (err) {
@@ -79,5 +93,43 @@ exports.login = async (req, res) => {
   } catch (err) {
     console.log("FULL ERROR LOG:", err);
     res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+exports.verifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({ message: "User already verified" });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    if (user.otpExpiry < new Date()) {
+      return res.status(400).json({ message: "OTP expired" });
+    }
+
+    // ✅ Mark verified
+    user.isVerified = true;
+    user.otp = null;
+    user.otpExpiry = null;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Account verified successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

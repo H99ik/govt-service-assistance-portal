@@ -28,11 +28,13 @@ const UserSchema = new mongoose.Schema({
 
   otp: {
     type: String,
-    otpExpires: Date,
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
+  },
+  otpExpires: {
+    type: Date,
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
   },
 
   role: {
@@ -41,13 +43,26 @@ const UserSchema = new mongoose.Schema({
     default: "citizen",
   },
   // Only for Agents
+
   isVerifiedAgent: {
     type: Boolean,
     default: false,
   },
+
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+
+  expiresAt: {
+    type: Date,
+    default: null,
+    index: { expires: 0 },
+  },
+
+  otpAttempts: {
+    type: Number,
+    default: 0,
   },
 });
 

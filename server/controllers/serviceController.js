@@ -132,7 +132,7 @@ exports.createService = async (req, res) => {
 exports.getPendingRequests = async (req, res) => {
   try {
     const requests = await ServiceRequest.find({
-      status: "Pending",
+      status: "Pending", agent: null, citizen: { $ne: req.user._id },
       $or: [{ agent: null }, { agent: { $exists: false } }],
     })
       .populate("citizen", "name email")

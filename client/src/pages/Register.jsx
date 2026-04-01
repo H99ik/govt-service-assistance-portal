@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Register() {
   const navigate = useNavigate();
@@ -10,6 +11,9 @@ function Register() {
     email: "",
     password: "",
     phone: "",
+    roleType: "citizen",
+    adminSecret: "",
+    agentSecret: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -43,10 +47,28 @@ function Register() {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:5000/api/auth/register", formData);
-      alert("Registration successful!");
-      navigate("/verify-otp");
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        formData,
+      );
+
+      console.log("REGISTER RESPONSE:", res.data);
+
+      if (!res.data || res.data.error) {
+        alert(res.data?.message || "Registration failed");
+        return;
+      }
+
+      localStorage.setItem("email", formData.email);
+      localStorage.setItem("phone", formData.phone);
+
+      alert("OTP sent! Please verify your account.");
+      setTimeout(() => {
+        navigate("/verify-otp");
+      }, 100);
     } catch (error) {
+      console.log("REGISTER ERROR:", error);
+      //console.log("REGISTER ERROR:", error.response?.data);
       alert(error.response?.data?.message || "Registration failed");
     }
   };
@@ -116,6 +138,44 @@ function Register() {
             ></i>
           </div>
 
+          <div className="mb-3">
+            <select
+              name="roleType"
+              className="form-control"
+              onChange={handleChange}
+            >
+              <option value="citizen">Citizen</option>
+              <option value="agent">Agent</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
+          {formData.roleType === "admin" && (
+            <div className="mb-3">
+              <input
+                type="text"
+                name="adminSecret"
+                className="form-control"
+                placeholder="Enter Admin Secret"
+                onChange={handleChange}
+                required
+              />
+            </div>
+          )}
+
+          {formData.roleType === "agent" && (
+            <div className="mb-3">
+              <input
+                type="text"
+                name="agentSecret"
+                className="form-control"
+                placeholder="Enter Agent Secret"
+                onChange={handleChange}
+                required
+              />
+            </div>
+          )}
+
           {formData.password && (
             <div className="mt-2 small">
               <p
@@ -156,15 +216,14 @@ function Register() {
             </div>
           )}
 
-          <button className="btn btn-primary w-100">Register</button>
+          <button type="submit" className="btn btn-primary w-100">
+            Register
+          </button>
         </form>
 
         {/* 🔥 Switch */}
         <p className="text-center mt-3 small">
-          Already have an account?{" "}
-          <a href="/login" className="fw-bold text-primary">
-            Login
-          </a>
+          Already have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>

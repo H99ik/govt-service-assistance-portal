@@ -12,6 +12,7 @@ import Footer from "./components/Footer";
 import DigitalIndiaLogo from "./assets/digital_india.png";
 import TrackRequest from "./pages/TrackRequest"; 
 import VerifyOTP from "./pages/VerifyOTP";
+import LoginOTP from "./pages/LoginOTP";
 
 function App() {
   return (
@@ -95,6 +96,7 @@ function App() {
             element={<VerifyCertificate />}
           />
           <Route path="/verify-otp" element={<VerifyOTP />} />
+          <Route path="/login-otp" element={<LoginOTP />} />
         </Routes>
       </div>
       <Footer />

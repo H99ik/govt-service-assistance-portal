@@ -3,6 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const [otpSent, setOtpSent] = useState(false);
+  const [loginMethod, setLoginMethod] = useState("email"); // email or phone
+  const [otp, setOtp] = useState("");
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -19,23 +22,38 @@ function Login() {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        formData,
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      alert("OTP sent!");
+      setOtpSent(true);
+      setLoginMethod("email");
+    } catch (err) {
+      alert(err.response?.data?.message || "Login failed");
+    }
+  };
+
+  const verifyOtp = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/verify-otp-login",
+        { email: formData.email, otp },
       );
 
-      // Save token
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      alert("Login successful!");
-      navigate("/");
-    } catch (error) {
-      alert(error.response?.data?.message || "Login failed");
+      const user = res.data.user;
+
+      if (user.role === "admin") navigate("/admin-dashboard");
+      else if (user.role === "agent") navigate("/agent-dashboard");
+      else navigate("/");
+    } catch (err) {
+      alert("Invalid OTP");
     }
   };
 
@@ -47,44 +65,70 @@ function Login() {
       <div className="card shadow p-4" style={{ width: "360px" }}>
         <h3 className="text-center mb-3 fw-bold">Login</h3>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
+        <div className="mb-3">
+          <input
+            type="email"
+            name="email"
+            className="form-control"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="mb-3 position-relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            className="form-control"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
+
+          <i
+            className={`bi ${
+              showPassword ? "bi-eye-slash" : "bi-eye"
+            } position-absolute`}
+            style={{
+              top: "50%",
+              right: "15px",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+            }}
+            onClick={() => setShowPassword(!showPassword)}
+          ></i>
+        </div>
+
+        <button className="btn btn-success w-100" onClick={handleLogin}>
+          Login
+        </button>
+
+        {/* OTP FIELD */}
+        {otpSent && (
+          <>
             <input
-              type="email"
-              name="email"
-              className="form-control"
-              placeholder="Email"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-3 position-relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              className="form-control"
-              placeholder="Password"
-              onChange={handleChange}
-              required
+              type="text"
+              placeholder="Enter OTP"
+              className="form-control mb-2"
+              onChange={(e) => setOtp(e.target.value)}
             />
 
-            <i
-              className={`bi ${
-                showPassword ? "bi-eye-slash" : "bi-eye"
-              } position-absolute`}
-              style={{
-                top: "50%",
-                right: "15px",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-              }}
-              onClick={() => setShowPassword(!showPassword)}
-            ></i>
-          </div>
+            <button className="btn btn-primary w-100" onClick={verifyOtp}>
+              Verify & Login
+            </button>
+          </>
+        )}
 
-          <button className="btn btn-success w-100">Login</button>
-        </form>
+        {/* PHONE OTP BUTTON */}
+        {!otpSent && (
+          <button
+            className="btn btn-outline-primary mt-2 w-100"
+            onClick={() => navigate("/login-otp")}
+          >
+            Login with Phone OTP
+          </button>
+        )}
 
         {/* 🔥 Switch */}
         <p className="text-center mt-3 small">

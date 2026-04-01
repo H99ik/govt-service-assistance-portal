@@ -1,11 +1,37 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function VerifyOTP() {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
+
+  const [timer, setTimer] = useState(30);
+  const [canResend, setCanResend] = useState(false);
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("email");
+
+    if (!savedEmail) {
+      navigate("/register");
+    } else {
+      setEmail(savedEmail);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    } else {
+      setCanResend(true);
+    }
+  }, [timer]);
 
   const handleVerify = async () => {
     try {
@@ -14,6 +40,9 @@ function VerifyOTP() {
         otp,
       });
 
+      localStorage.removeItem("email");
+      localStorage.removeItem("phone");
+
       alert("Account verified successfully!");
       navigate("/login");
     } catch (err) {
@@ -21,16 +50,26 @@ function VerifyOTP() {
     }
   };
 
+  const handleResend = async () => {
+    try {
+      await axios.post("http://localhost:5000/api/auth/resend-otp", {
+        email,
+      });
+
+      setTimer(30);
+      setCanResend(false);
+
+      alert("OTP resent!");
+    } catch (err) {
+      alert("Failed to resend OTP");
+    }
+  };
+
   return (
     <div className="container mt-5">
       <h3>Verify OTP</h3>
 
-      <input
-        type="email"
-        placeholder="Enter Email"
-        className="form-control mb-2"
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <p className="text-muted">Verifying: {email}</p>
 
       <input
         type="text"
@@ -42,6 +81,14 @@ function VerifyOTP() {
       <button className="btn btn-success" onClick={handleVerify}>
         Verify OTP
       </button>
+
+      {!canResend ? (
+        <p className="text-muted">Resend OTP in {timer}s</p>
+      ) : (
+        <button className="btn btn-link" onClick={handleResend}>
+          Resend OTP
+        </button>
+      )}
     </div>
   );
 }

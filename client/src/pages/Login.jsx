@@ -131,6 +131,16 @@ function Login() {
         )}
 
         {/* 🔥 Switch */}
+        
+        <p className="text-center mt-2">
+          <span
+            style={{ cursor: "pointer", color: "blue" }}
+            onClick={() => navigate("/forgot-password")}
+          >
+            Forgot Password?
+          </span>
+        </p>
+
         <p className="text-center mt-3 small">
           Don’t have an account?{" "}
           <a href="/register" className="fw-bold text-primary">

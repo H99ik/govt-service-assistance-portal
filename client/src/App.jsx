@@ -10,9 +10,12 @@ import Home from "./pages/Home";
 import VerifyCertificate from "./pages/VerifyCertificate";
 import Footer from "./components/Footer";
 import DigitalIndiaLogo from "./assets/digital_india.png";
-import TrackRequest from "./pages/TrackRequest"; 
+import TrackRequest from "./pages/TrackRequest";
 import VerifyOTP from "./pages/VerifyOTP";
 import LoginOTP from "./pages/LoginOTP";
+import ForgotPassword from "./pages/ForgotPassword";
+import VerifyResetOtp from "./pages/VerifyResetOtp";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -97,6 +100,9 @@ function App() {
           />
           <Route path="/verify-otp" element={<VerifyOTP />} />
           <Route path="/login-otp" element={<LoginOTP />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </div>
       <Footer />

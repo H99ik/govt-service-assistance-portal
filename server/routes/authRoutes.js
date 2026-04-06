@@ -8,6 +8,9 @@ const {
   loginWithOtp,
   verifyLoginOtp,
   resendOtp,
+  forgotPassword,
+  verifyResetOtp,
+  resetPassword,
 } = require("../controllers/authController");
 
 const {
@@ -25,6 +28,9 @@ router.post("/verify-otp", verifyOTP);
 router.post("/verify-otp-login", verifyLoginOtp);
 router.post("/login-otp", loginWithOtp);
 router.post("/resend-otp", resendOtp);
+router.post("/forgot-password", forgotPassword);
+router.post("/verify-reset-otp", verifyResetOtp);
+router.post("/reset-password", resetPassword);
 
 // Admin routes
 router.get("/all-requests", protect, adminProtect, getAllRequests);

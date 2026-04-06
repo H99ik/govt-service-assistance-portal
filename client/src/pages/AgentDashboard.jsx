@@ -6,6 +6,9 @@ function AgentDashboard() {
   const [assignedRequests, setAssignedRequests] = useState([]);
 
   useEffect(() => {
+    setRequests([]);
+    setAssignedRequests([]);
+
     fetchPendingRequests();
     fetchAssignedRequests();
   }, []);
@@ -22,10 +25,15 @@ function AgentDashboard() {
           },
         },
       );
+      setRequests(response.data.data.filter((req) => req.status === "Pending"));
 
-      setRequests(response.data.data);
+      setAssignedRequests(
+        response.data.data.filter((req) => req.status === "In Progress"),
+      );
+
     } catch (error) {
       console.error("Error fetching pending requests:", error);
+      console.log("ERROR:", error.response?.data || error.message);
     }
   };
 
@@ -45,6 +53,7 @@ function AgentDashboard() {
       setAssignedRequests(response.data.data);
     } catch (error) {
       console.error("Error fetching assigned requests:", error);
+      console.log("ERROR:", error.response?.data || error.message);
     }
   };
 
@@ -102,61 +111,63 @@ function AgentDashboard() {
       {requests.length === 0 ? (
         <p>No pending requests.</p>
       ) : (
-        requests?.map((req) => (
-          <div key={req._id} className="card p-3 mb-3">
-            <h5>{req.serviceType?.name}</h5>
+        requests
+          ?.filter((req) => req.status === "Pending")
+          .map((req) => (
+            <div key={req._id} className="card p-3 mb-3">
+              <h5>{req.serviceType?.name}</h5>
 
-            <p>
-              <strong>Description:</strong> {req.description}
-            </p>
+              <p>
+                <strong>Description:</strong> {req.description}
+              </p>
 
-            <p>
-              <strong>Citizen:</strong> {req.citizen?.name}
-            </p>
+              <p>
+                <strong>Citizen:</strong> {req.citizen?.name}
+              </p>
 
-            <p>
-              <strong>Status:</strong> {req.status}
-            </p>
+              <p>
+                <strong>Status:</strong> {req.status}
+              </p>
 
-            {req.documents?.length > 0 && (
-              <div className="mb-2">
-                <strong>Uploaded Documents:</strong>
+              {req.documents?.length > 0 && (
+                <div className="mb-2">
+                  <strong>Uploaded Documents:</strong>
 
-                {req.documents.map((doc, index) => (
-                  <div key={index}>
-                    <a
-                      href={`http://localhost:5000/uploads/${doc}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      View Document {index + 1}
-                    </a>
-                  </div>
-                ))}
+                  {req.documents.map((doc, index) => (
+                    <div key={index}>
+                      <a
+                        href={`http://localhost:5000/uploads/${doc}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        View Document {index + 1}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="mt-2">
+                {req.status === "Pending" && (
+                  <button
+                    className="btn btn-success me-2"
+                    onClick={() => handleAccept(req._id)}
+                  >
+                    Accept
+                  </button>
+                )}
+
+                {req.status === "In Progress" && (
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => updateStatus(req._id, "SubmittedToAdmin")}
+                  >
+                    Submit to Admin
+                  </button>
+                )}
               </div>
-            )}
-
-            <div className="mt-2">
-              {req.status === "Pending" && (
-                <button
-                  className="btn btn-success me-2"
-                  onClick={() => handleAccept(req._id)}
-                >
-                  Accept
-                </button>
-              )}
-
-              {req.status === "In Progress" && (
-                <button
-                  className="btn btn-primary"
-                  onClick={() => updateStatus(req._id, "SubmittedToAdmin")}
-                >
-                  Submit to Admin
-                </button>
-              )}
             </div>
-          </div>
-        ))
+          ))
       )}
 
       <h3 className="mt-5">My Assigned Requests</h3>

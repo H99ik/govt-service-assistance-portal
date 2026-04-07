@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, phone, adminSecret, agentSecret } = req.body;
+    const { name, email, password, phone } = req.body;
 
     if (!email || typeof email !== "string") {
       return res.status(400).json({ message: "Email is required" });
@@ -29,30 +29,10 @@ exports.register = async (req, res) => {
     // 3. Default role
     let role = "citizen";
 
-    // 4. If admin secret matches, make admin
-
-    if (req.body.roleType === "admin") {
-      if (adminSecret !== process.env.ADMIN_SECRET) {
-        return res.status(403).json({
-          message: "Invalid Admin Secret",
-        });
-      }
-      role = "admin";
-    }
-
-    if (req.body.roleType === "agent") {
-      if (agentSecret !== process.env.AGENT_SECRET) {
-        return res.status(403).json({
-          message: "Invalid Agent Secret",
-        });
-      }
-      role = "agent";
-    }
-
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
 
-    // 5. Create user
+    // 4. Create user
     user = new User({
       name,
       email,
@@ -260,7 +240,7 @@ exports.verifyLoginOtp = async (req, res) => {
       return res.status(429).json({
         message: "Too many attempts. Try again later.",
       });
-    }else{
+    } else {
       user.otpAttempts = 0; // reset attempts on successful login
       await user.save();
     }

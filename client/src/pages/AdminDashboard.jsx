@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function AdminDashboard() {
   const [requests, setRequests] = useState([]);
@@ -10,6 +11,8 @@ function AdminDashboard() {
     estimatedTime: "",
     serviceCharge: "",
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchRequests();
@@ -122,7 +125,16 @@ function AdminDashboard() {
 
   return (
     <div className="container mt-5">
-      <h2>Admin Dashboard</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="mb-0">Admin Dashboard</h2>
+
+        <button
+          className="btn btn-primary shadow-sm"
+          onClick={() => navigate("/manage-users")}
+        >
+          👤 Manage Users
+        </button>
+      </div>
 
       {/* Create Service */}
       <div className="card p-3 mb-4">

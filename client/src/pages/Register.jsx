@@ -11,9 +11,6 @@ function Register() {
     email: "",
     password: "",
     phone: "",
-    roleType: "citizen",
-    adminSecret: "",
-    agentSecret: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -137,44 +134,6 @@ function Register() {
               onClick={() => setShowPassword(!showPassword)}
             ></i>
           </div>
-
-          <div className="mb-3">
-            <select
-              name="roleType"
-              className="form-control"
-              onChange={handleChange}
-            >
-              <option value="citizen">Citizen</option>
-              <option value="agent">Agent</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
-          {formData.roleType === "admin" && (
-            <div className="mb-3">
-              <input
-                type="text"
-                name="adminSecret"
-                className="form-control"
-                placeholder="Enter Admin Secret"
-                onChange={handleChange}
-                required
-              />
-            </div>
-          )}
-
-          {formData.roleType === "agent" && (
-            <div className="mb-3">
-              <input
-                type="text"
-                name="agentSecret"
-                className="form-control"
-                placeholder="Enter Agent Secret"
-                onChange={handleChange}
-                required
-              />
-            </div>
-          )}
 
           {formData.password && (
             <div className="mt-2 small">

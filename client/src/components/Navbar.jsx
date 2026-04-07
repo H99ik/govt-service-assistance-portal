@@ -201,15 +201,30 @@ function Navbar() {
                 </li>
 
                 <li>
-                  <button className="dropdown-item">Profile</button>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => navigate("/profile")}
+                  >
+                    Profile
+                  </button>
                 </li>
 
                 <li>
-                  <button className="dropdown-item">Account Settings</button>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => navigate("/profile")}
+                  >
+                    Account Settings
+                  </button>
                 </li>
 
                 <li>
-                  <button className="dropdown-item">Change Password</button>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => navigate("/change-password")}
+                  >
+                    Change Password
+                  </button>
                 </li>
 
                 <li>

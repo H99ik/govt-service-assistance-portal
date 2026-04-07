@@ -116,6 +116,33 @@ exports.changePassword = async (req, res) => {
       return res.status(400).json({ message: "Old password incorrect" });
     }
 
+    // check last 3 passwords
+    if (user.passwordHistory && user.passwordHistory.length > 0) {
+      for (let oldPass of user.passwordHistory) {
+        const isSame = await bcrypt.compare(newPassword, oldPass);
+        if (isSame) {
+          return res.status(400).json({
+            message: "You cannot reuse your last 3 passwords",
+          });
+        }
+      }
+    }
+
+    // also check current password
+    const isSameCurrent = await bcrypt.compare(newPassword, user.password);
+    if (isSameCurrent) {
+      return res.status(400).json({
+        message: "New password cannot be same as current password",
+      });
+    }
+
+    // save current password to history
+    user.passwordHistory = [
+      user.password,
+      ...(user.passwordHistory || []),
+    ].slice(0, 3);
+
+    // hash new password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
 

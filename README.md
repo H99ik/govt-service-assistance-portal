@@ -96,7 +96,7 @@ npm run dev
 
 ## 👨‍💻 Author
 
-Hardik Goswami
+Hardikgiri Goswami
 
 ---
 

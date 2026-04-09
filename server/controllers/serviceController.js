@@ -132,7 +132,9 @@ exports.createService = async (req, res) => {
 exports.getPendingRequests = async (req, res) => {
   try {
     const requests = await ServiceRequest.find({
-      status: "Pending", agent: null, citizen: { $ne: req.user._id },
+      status: "Pending",
+      agent: null,
+      citizen: { $ne: req.user._id },
       $or: [{ agent: null }, { agent: { $exists: false } }],
     })
       .populate("citizen", "name email")
@@ -283,52 +285,55 @@ const generateCertificate = async (request) => {
   doc.pipe(fs.createWriteStream(filePath));
 
   // BORDER
-  doc.rect(20, 20, 555, 800).stroke();
+  doc.lineWidth(3).rect(20, 20, 555, 800).stroke("#c9a646");
+  doc.lineWidth(1).rect(30, 30, 535, 780).stroke("#c9a646");
 
   // HEADER
   doc.fontSize(20).text("GOVERNMENT OF INDIA", { align: "center" });
-
+  doc.moveDown(0.5);
   doc.fontSize(14).text("Government Service Portal", { align: "center" });
 
-  doc.moveDown(2);
-
   // TITLE
+  doc.moveDown(1);
   doc.fontSize(18).text("CERTIFICATE OF APPROVAL", {
     align: "center",
     underline: true,
   });
 
-  doc.moveDown(2);
+  doc.moveDown(1);
 
   // BODY TEXT
+  doc.moveDown(1.5);
   doc
     .fontSize(12)
     .text(
-      `This is to certify that the request submitted by the citizen has been successfully verified and approved by the authority.`,
+      `This is to certify that ${request.citizen.name} has successfully completed the process for ${request.serviceType.name} under the Government Service Portal.`,
       { align: "center" },
     );
 
-  doc.moveDown(2);
+  doc.moveDown(1);
 
   // DETAILS
-  doc.fontSize(12).text(`Citizen Name: ${request.citizen.name}`);
-  doc.text(`Service: ${request.serviceType.name}`);
-  doc.text(`Tracking ID: ${request.trackingId}`);
-  doc.text(`Certificate ID: ${certificateId}`);
-  doc.text(`Date: ${new Date().toLocaleDateString()}`);
+  doc.moveDown(1.5);
+  doc
+    .fontSize(12)
+    .text(`Certificate ID: ${certificateId}`, { align: "center" });
+  doc.text(`Tracking ID: ${request.trackingId}`, { align: "center" });
+  doc.text(`Date: ${new Date().toLocaleDateString()}`, { align: "center" });
 
   doc.moveDown(3);
 
   // SIGNATURE
-  doc.text("Authorized Signature", { align: "right" });
-
-  doc.moveDown(2);
+  doc.moveDown(4);
+  doc.text("____________________", { align: "right" });
+  doc.text("Authorized Officer", { align: "right" });
+  doc.moveDown(1.5);
 
   // QR CODE CENTER
-  doc.image(qrImage, {
-    fit: [100, 100],
-    align: "center",
-  });
+  doc.image(qrImage, 450, 650, { width: 100 });
+
+  // QR CODE LABEL
+  doc.fontSize(8).text("Scan to Verify", 450, 750, { align: "center" });
 
   doc.end();
 

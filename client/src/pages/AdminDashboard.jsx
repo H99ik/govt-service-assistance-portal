@@ -13,6 +13,7 @@ function AdminDashboard() {
   });
 
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("services");
 
   useEffect(() => {
     fetchRequests();
@@ -125,160 +126,185 @@ function AdminDashboard() {
 
   return (
     <div className="container mt-5">
+      {/* HEADER */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-0">Admin Dashboard</h2>
 
-        <button
-          className="btn btn-primary shadow-sm"
-          onClick={() => navigate("/manage-users")}
-        >
-          👤 Manage Users
-        </button>
+        <div>
+          <button
+            className={`btn me-2 ${
+              activeTab === "services" ? "btn-primary" : "btn-outline-primary"
+            }`}
+            onClick={() => setActiveTab("services")}
+          >
+            🛠 Services
+          </button>
+
+          <button
+            className={`btn me-2 ${
+              activeTab === "requests" ? "btn-success" : "btn-outline-success"
+            }`}
+            onClick={() => setActiveTab("requests")}
+          >
+            📄 Requests
+          </button>
+
+          <button
+            className="btn btn-dark"
+            onClick={() => navigate("/manage-users")}
+          >
+            👤 Users
+          </button>
+        </div>
       </div>
 
-      {/* Create Service */}
-      <div className="card p-3 mb-4">
-        <h4>Create New Service</h4>
+      {/* ================= SERVICES TAB ================= */}
+      {activeTab === "services" && (
+        <>
+          <div className="card p-3 mb-4 shadow-sm border-0">
+            <h4>Create New Service</h4>
 
-        <form onSubmit={createService}>
-          <input
-            className="form-control mb-2"
-            placeholder="Service Name"
-            name="name"
-            value={serviceData.name}
-            onChange={handleChange}
-            required
-          />
+            <form onSubmit={createService}>
+              <input
+                className="form-control mb-2"
+                placeholder="Service Name"
+                name="name"
+                value={serviceData.name}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className="form-control mb-2"
+                placeholder="Description"
+                name="description"
+                value={serviceData.description}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className="form-control mb-2"
+                placeholder="Required Documents (comma separated)"
+                name="requiredDocuments"
+                value={serviceData.requiredDocuments}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className="form-control mb-2"
+                placeholder="Estimated Time"
+                name="estimatedTime"
+                value={serviceData.estimatedTime}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className="form-control mb-2"
+                placeholder="Service Charge"
+                name="serviceCharge"
+                value={serviceData.serviceCharge}
+                onChange={handleChange}
+                required
+              />
 
-          <input
-            className="form-control mb-2"
-            placeholder="Description"
-            name="description"
-            value={serviceData.description}
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            className="form-control mb-2"
-            placeholder="Required Documents (comma separated)"
-            name="requiredDocuments"
-            value={serviceData.requiredDocuments}
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            className="form-control mb-2"
-            placeholder="Estimated Time"
-            name="estimatedTime"
-            value={serviceData.estimatedTime}
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            className="form-control mb-2"
-            placeholder="Service Charge"
-            name="serviceCharge"
-            value={serviceData.serviceCharge}
-            onChange={handleChange}
-            required
-          />
-
-          <button className="btn btn-primary">Create Service</button>
-        </form>
-      </div>
-
-      {/* All Requests */}
-      <h4 className="mt-4">Manage Services</h4>
-
-      <table className="table table-bordered">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Charge</th>
-            <th>Time</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {services.map((service) => (
-            <tr key={service._id}>
-              <td>{service.name}</td>
-              <td>₹{service.serviceCharge}</td>
-              <td>{service.estimatedTime}</td>
-
-              <td>
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => deleteService(service._id)}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {requests.length === 0 ? (
-        <p>No requests available</p>
-      ) : (
-        requests.map((req) => (
-          <div key={req._id} className="card p-3 mb-3">
-            <h5>{req.serviceType?.name}</h5>
-
-            <p>
-              <strong>Citizen:</strong> {req.citizen?.name}
-            </p>
-
-            <p>
-              <strong>Status:</strong> {req.status}
-            </p>
-
-            <p className="badge bg-dark">Tracking ID: {req.trackingId}</p>
-
-            {req.documents?.length > 0 && (
-              <div className="mb-2">
-                <strong>Uploaded Documents:</strong>
-
-                {req.documents.map((doc, index) => (
-                  <div key={index}>
-                    <a
-                      href={`http://localhost:5000/uploads/${doc}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      View Document {index + 1}
-                    </a>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {(req.status === "In Progress" ||
-              req.status === "SubmittedToAdmin") &&
-              req.documents?.length > 0 && (
-                <div className="mt-2">
-                  <button
-                    className="btn btn-success me-2"
-                    onClick={() => updateStatus(req._id, "Completed")}
-                  >
-                    Approve & Generate Certificate
-                  </button>
-
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => updateStatus(req._id, "Rejected")}
-                  >
-                    Reject
-                  </button>
-                </div>
-              )}
+              <button className="btn btn-primary btn-sm">Create Service</button>
+            </form>
           </div>
-        ))
+
+          <h4 className="mt-4">Manage Services</h4>
+
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Charge</th>
+                <th>Time</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {services.map((service) => (
+                <tr key={service._id}>
+                  <td>{service.name}</td>
+                  <td>₹{service.serviceCharge}</td>
+                  <td>{service.estimatedTime}</td>
+
+                  <td>
+                    <button
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={() => deleteService(service._id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
+
+      {/* ================= REQUESTS TAB ================= */}
+      {activeTab === "requests" && (
+        <>
+          {requests.length === 0 ? (
+            <p>No requests available</p>
+          ) : (
+            requests.map((req) => (
+              <div key={req._id} className="card p-3 mb-3 shadow-sm border-0">
+                <h5>{req.serviceType?.name}</h5>
+
+                <p>
+                  <strong>Citizen:</strong> {req.citizen?.name}
+                </p>
+
+                <p>
+                  <strong>Status:</strong> {req.status}
+                </p>
+
+                <p className="badge bg-dark">Tracking ID: {req.trackingId}</p>
+
+                {req.documents?.length > 0 && (
+                  <div className="mb-2">
+                    <strong>Uploaded Documents:</strong>
+
+                    {req.documents.map((doc, index) => (
+                      <div key={index}>
+                        <a
+                          href={`http://localhost:5000/uploads/${doc}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          View Document {index + 1}
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {(req.status === "In Progress" ||
+                  req.status === "SubmittedToAdmin") &&
+                  req.documents?.length > 0 && (
+                    <div className="d-flex gap-2 mt-2">
+                      <button
+                        className="btn btn-sm btn-success"
+                        onClick={() => updateStatus(req._id, "Completed")}
+                      >
+                        Approve
+                      </button>
+
+                      <button
+                        className="btn btn-sm btn-outline-danger"
+                        onClick={() => updateStatus(req._id, "Rejected")}
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  )}
+              </div>
+            ))
+          )}
+        </>
       )}
     </div>
   );

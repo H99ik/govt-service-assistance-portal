@@ -30,7 +30,6 @@ function AgentDashboard() {
       setAssignedRequests(
         response.data.data.filter((req) => req.status === "In Progress"),
       );
-
     } catch (error) {
       console.error("Error fetching pending requests:", error);
       console.log("ERROR:", error.response?.data || error.message);
@@ -149,21 +148,25 @@ function AgentDashboard() {
 
               <div className="mt-2">
                 {req.status === "Pending" && (
-                  <button
-                    className="btn btn-success me-2"
-                    onClick={() => handleAccept(req._id)}
-                  >
-                    Accept
-                  </button>
+                  <div className="d-flex gap-2 mt-2">
+                    <button
+                      className="btn btn-sm btn-success"
+                      onClick={() => handleAccept(req._id)}
+                    >
+                      Accept
+                    </button>
+                  </div>
                 )}
 
                 {req.status === "In Progress" && (
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => updateStatus(req._id, "SubmittedToAdmin")}
-                  >
-                    Submit to Admin
-                  </button>
+                  <div className="d-flex gap-2 mt-2">
+                    <button
+                      className="btn btn-sm btn-primary"
+                      onClick={() => updateStatus(req._id, "SubmittedToAdmin")}
+                    >
+                      Submit
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
@@ -213,18 +216,21 @@ function AgentDashboard() {
 
             {req.status === "In Progress" && (
               <>
-                <button
-                  className="btn btn-primary"
-                  onClick={() => updateStatus(req._id, "SubmittedToAdmin")}
-                >
-                  Submit to Admin
-                </button>
-                <button
-                  className="btn btn-secondary ms-2"
-                  onClick={() => updateStatus(req._id, "Rejected")}
-                >
-                  Reject
-                </button>
+                <div className="d-flex gap-2 mt-2">
+                  <button
+                    className="btn btn-sm btn-primary"
+                    onClick={() => updateStatus(req._id, "SubmittedToAdmin")}
+                  >
+                    Submit
+                  </button>
+
+                  <button
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => updateStatus(req._id, "Rejected")}
+                  >
+                    Reject
+                  </button>
+                </div>
 
                 {req.status === "Rejected" && (
                   <span className="badge bg-danger">Rejected</span>

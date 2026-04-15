@@ -40,9 +40,10 @@ function Services() {
       );
 
       alert("Service request submitted! SMS sent 📱");
-      setSelectedService(null);
-      setPhone("");
     } catch (error) {
+      console.log("FULL ERROR:", error);
+      console.log("SERVER ERROR:", error.response?.data);
+
       alert(error.response?.data?.message || "Request failed");
     }
   };
@@ -61,7 +62,10 @@ function Services() {
 
                 <h5 className="fw-bold">{service.name}</h5>
 
-                <p className="text-muted small">{service.description}</p>
+                <p className="text-muted small">
+                  {service.description ||
+                    "Apply for this government service easily online."}
+                </p>
 
                 <p className="fw-bold">Charge: ₹{service.serviceCharge}</p>
 

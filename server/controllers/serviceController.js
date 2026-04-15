@@ -279,7 +279,7 @@ const generateCertificate = async (request) => {
 
   const doc = new PDFDocument({
     size: "A4",
-    margin: 50,
+    margin: 30,
   });
 
   doc.pipe(fs.createWriteStream(filePath));
@@ -295,46 +295,68 @@ const generateCertificate = async (request) => {
 
   // TITLE
   doc.moveDown(1);
-  doc.fontSize(18).text("CERTIFICATE OF APPROVAL", {
+  doc.fontSize(26).text("CERTIFICATE", { align: "center" });
+
+  // DETAILS
+  doc.moveDown(0.5);
+  doc.fontSize(10).text(`Certificate No: ${certificateId}`, {
+    align: "center",
+  });
+  doc.text(`Date: ${new Date().toLocaleDateString()}`, {
+    align: "center",
+  });
+
+  // BODY
+  doc.moveDown(1);
+
+  doc.fontSize(12).text("This is to certify that", {
+    align: "center",
+  });
+
+  doc.moveDown(0.5);
+
+  const userName = request.citizen?.name?.trim()
+    ? request.citizen.name
+    : request.citizen?.email?.split("@")[0] || "Citizen";
+
+  doc.fontSize(22).text(userName, {
     align: "center",
     underline: true,
   });
 
-  doc.moveDown(1);
+  doc.moveDown(0.5);
 
-  // BODY TEXT
-  doc.moveDown(1.5);
+  doc.fontSize(12).text("has successfully applied for", {
+    align: "center",
+  });
+
+  doc.moveDown(0.5);
+
+  doc.fontSize(16).text(request.serviceType?.name, {
+    align: "center",
+  });
+
+  doc.moveDown(0.7);
+
   doc
     .fontSize(12)
-    .text(
-      `This is to certify that ${request.citizen.name} has successfully completed the process for ${request.serviceType.name} under the Government Service Portal.`,
-      { align: "center" },
-    );
+    .text("under the Government Service Portal.", { align: "center" });
 
-  doc.moveDown(1);
+  // BOTTOM SECTION (MATCH FRONTEND)
+  const yPosition = 520;
 
-  // DETAILS
-  doc.moveDown(1.5);
-  doc
-    .fontSize(12)
-    .text(`Certificate ID: ${certificateId}`, { align: "center" });
-  doc.text(`Tracking ID: ${request.trackingId}`, { align: "center" });
-  doc.text(`Date: ${new Date().toLocaleDateString()}`, { align: "center" });
+  // LEFT - QR
+  doc.image(qrImage, 80, yPosition, { width: 80 });
+  doc.fontSize(8).text("Scan to Verify", 80, yPosition + 85, {
+    width: 80,
+    align: "center",
+  });
 
-  doc.moveDown(3);
+  // RIGHT - SIGNATURE
+  doc.text("____________________", 380, yPosition + 20);
+  doc.text("Authorized Officer", 380, yPosition + 40);
 
-  // SIGNATURE
-  doc.moveDown(4);
-  doc.text("____________________", { align: "right" });
-  doc.text("Authorized Officer", { align: "right" });
-  doc.moveDown(1.5);
-
-  // QR CODE CENTER
-  doc.image(qrImage, 450, 650, { width: 100 });
-
-  // QR CODE LABEL
-  doc.fontSize(8).text("Scan to Verify", 450, 750, { align: "center" });
-
+  // END
   doc.end();
 
   return {
@@ -486,7 +508,7 @@ exports.getRequestsForAdmin = async (req, res) => {
 exports.trackRequest = async (req, res) => {
   try {
     const request = await ServiceRequest.findOne({
-      trackingId: req.params.trackingId,
+      trackingId: { $regex: new RegExp(`^${req.params.trackingId}$`, "i") },
     }).populate("serviceType");
 
     if (!request) {

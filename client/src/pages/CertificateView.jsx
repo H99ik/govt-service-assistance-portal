@@ -6,11 +6,10 @@ function CertificateView({ data }) {
       style={{
         width: "850px",
         margin: "auto",
-        padding: "50px",
+        padding: "40px 50px",
         border: "12px double #c9a646",
         background: "#fffdf5",
         fontFamily: "serif",
-        position: "relative",
       }}
     >
       {/* HEADER */}
@@ -21,69 +20,75 @@ function CertificateView({ data }) {
           style={{ height: "60px", marginBottom: "10px" }}
         />
 
-        <h2 style={{ fontWeight: "bold", margin: 0 }}>
-          Government of India
-        </h2>
+        <h2 style={{ margin: 0, fontWeight: "bold" }}>GOVERNMENT OF INDIA</h2>
 
         <p style={{ margin: 0 }}>Government Service Portal</p>
 
-        <h1 style={{ marginTop: "20px", letterSpacing: "3px" }}>
-          CERTIFICATE OF APPROVAL
+        <h1
+          style={{
+            marginTop: "20px",
+            letterSpacing: "3px",
+            fontSize: "28px",
+          }}
+        >
+          CERTIFICATE
         </h1>
       </div>
 
-      {/* BODY */}
-      <p style={{ marginTop: "40px", fontSize: "18px", textAlign: "center" }}>
-        This is to certify that <strong>{data.name}</strong> has successfully
-        completed the process for{" "}
-        <strong>{data.service}</strong> under the Government Service Portal.
-      </p>
-
       {/* DETAILS */}
-      <div style={{ marginTop: "40px", fontSize: "16px" }}>
-        <p>
-          <strong>Certificate ID:</strong> {data.certificateId}
-        </p>
-        <p>
-          <strong>Date of Issue:</strong> {data.date}
-        </p>
+      <div style={{ textAlign: "center", marginTop: "10px" }}>
+        <p style={{ margin: "2px" }}>Certificate No: {data.certificateId}</p>
+        <p style={{ margin: "2px" }}>Date: {data.date}</p>
       </div>
 
-      {/* SIGNATURE + SEAL */}
+      {/* BODY */}
+      <div style={{ marginTop: "25px", textAlign: "center" }}>
+        <p>This is to certify that</p>
+
+        <h2
+          style={{
+            fontWeight: "bold",
+            fontSize: "30px",
+            margin: "10px 0",
+            textTransform: "capitalize",
+          }}
+        >
+          {data.citizen?.name ||
+            data.citizen?.email?.split("@")[0] ||
+            "Citizen"}
+        </h2>
+
+        <p>has successfully applied for</p>
+
+        <h3 style={{ margin: "10px 0" }}>{data.serviceType?.name}</h3>
+
+        <p>under the Government Service Portal.</p>
+      </div>
+
+      {/* BOTTOM SECTION */}
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
-          marginTop: "80px",
+          alignItems: "flex-end",
+          marginTop: "60px",
+          padding: "0 60px",
         }}
       >
+        {/* LEFT - QR */}
         <div style={{ textAlign: "center" }}>
-          <p>_____________________</p>
+          <QRCodeCanvas
+            value={`http://localhost:5173/verify/${data.certificateId}`}
+            size={80}
+          />
+          <p style={{ fontSize: "11px", marginTop: "5px" }}>Scan to Verify</p>
+        </div>
+
+        {/* RIGHT - SIGNATURE */}
+        <div style={{ textAlign: "center" }}>
+          <p style={{ marginBottom: "5px" }}>_____________________</p>
           <p>Authorized Officer</p>
         </div>
-
-        <div style={{ textAlign: "center" }}>
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/120px-Emblem_of_India.svg.png"
-            alt="seal"
-            style={{ width: "70px", opacity: 0.8 }}
-          />
-          <p>Official Seal</p>
-        </div>
-      </div>
-
-      {/* QR CODE */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "40px",
-          right: "40px",
-        }}
-      >
-        <QRCodeCanvas
-          value={`http://localhost:5173/verify/${data.certificateId}`}
-          size={90}
-        />
       </div>
     </div>
   );

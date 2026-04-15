@@ -20,42 +20,28 @@ function Home() {
 
   return (
     <>
-      {/* HERO / CONTENT */}
-      <div
-        className="container-fluid"
-        style={{
-          background: "#f5f7fa",
-          padding: "60px 40px",
-          borderBottom: "4px solid #FF9933",
-        }}
-      >
-        <div className="container mt-4">
-          <div className="row align-items-start">
-            {/* LEFT */}
-            <div className="col-md-8 pe-5" style={{ lineHeight: "1.8" }}>
-              <h4 className="fw-bold mb-3" style={{ letterSpacing: "0.5px" }}>
-                WELCOME TO GOVERNMENT SERVICE PORTAL
-              </h4>
+      <div className="container-fluid py-5" style={{ background: "#f8f9fa" }}>
+        <div className="container">
+          <div className="row align-items-center">
+            {/* LEFT CONTENT */}
+            <div className="col-md-7">
+              <h3 className="fw-bold mb-3">
+                Welcome to Government Service Portal
+              </h3>
 
-              <p
-                className="text-muted"
-                style={{ lineHeight: "1.9", textAlign: "justify" }}
-              >
+              <p className="text-muted" style={{ lineHeight: "1.8" }}>
                 This portal provides easy access to various government services
                 and certificates. Citizens can apply online, track their
                 requests, and download certificates without visiting offices.
               </p>
 
-              <p
-                className="text-muted"
-                style={{ lineHeight: "1.9", textAlign: "justify" }}
-              >
+              <p className="text-muted">
                 Our mission is to bring transparency, efficiency, and
                 accessibility to public services.
               </p>
 
-              <div className="mt-4 d-flex gap-3">
-                <Link to="/services" className="btn btn-primary">
+              <div className="mt-4">
+                <Link to="/services" className="btn btn-primary me-2">
                   Explore Services
                 </Link>
 
@@ -65,15 +51,20 @@ function Home() {
               </div>
             </div>
 
-            {/* RIGHT */}
-            <div className="col-md-4 mt-4 mt-md-0">
+            {/* RIGHT IMAGE + NOTICE */}
+            <div className="col-md-5 mt-4 mt-md-0">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
+                alt="service"
+                className="img-fluid mb-3"
+                style={{ maxHeight: "200px", objectFit: "contain" }}
+              />
+
               <div className="card border-danger shadow-sm p-3">
-                <h6 className="text-danger fw-bold">
-                  ⚠ Beware of Fake Websites
-                </h6>
-                <p className="small text-muted">
+                <h6 className="text-danger fw-bold">⚠ Important Notice</h6>
+                <p className="small text-muted mb-0">
                   Do not trust any unauthorized websites or agents. Always use
-                  the official portal.
+                  official portal.
                 </p>
               </div>
             </div>

@@ -284,79 +284,99 @@ const generateCertificate = async (request) => {
 
   doc.pipe(fs.createWriteStream(filePath));
 
-  // BORDER
+  /* ================= BORDER ================= */
   doc.lineWidth(3).rect(20, 20, 555, 800).stroke("#c9a646");
   doc.lineWidth(1).rect(30, 30, 535, 780).stroke("#c9a646");
 
-  // HEADER
-  doc.fontSize(20).text("GOVERNMENT OF INDIA", { align: "center" });
-  doc.moveDown(0.5);
+  /* ================= WATERMARK ================= */
+  doc.opacity(0.05);
+  doc.image("assets/National-Emblem.png", 180, 220, { width: 250 });
+  doc.opacity(1);
+
+  /* ================= HEADER ================= */
+  doc.fontSize(24).text("GOVERNMENT OF INDIA", { align: "center" });
+  doc.moveDown(0.2);
   doc.fontSize(14).text("Government Service Portal", { align: "center" });
 
-  // TITLE
-  doc.moveDown(1);
-  doc.fontSize(26).text("CERTIFICATE", { align: "center" });
+  /* ================= TITLE ================= */
+  doc.moveDown(0.8);
+  doc.fontSize(30).text("CERTIFICATE", { align: "center" });
 
-  // DETAILS
-  doc.moveDown(0.5);
-  doc.fontSize(10).text(`Certificate No: ${certificateId}`, {
-    align: "center",
-  });
-  doc.text(`Date: ${new Date().toLocaleDateString()}`, {
-    align: "center",
-  });
+  /* ================= META ================= */
+  doc.moveDown(0.3);
+  doc
+    .fontSize(11)
+    .text(`Certificate No: ${certificateId}`, { align: "center" });
+  doc.text(`Date: ${new Date().toLocaleDateString()}`, { align: "center" });
 
-  // BODY
+  /* ================= BODY ================= */
   doc.moveDown(1);
 
-  doc.fontSize(12).text("This is to certify that", {
-    align: "center",
-  });
+  doc.fontSize(14).text("This is to certify that", { align: "center" });
 
   doc.moveDown(0.5);
 
+  // NAME
   const userName = request.citizen?.name?.trim()
     ? request.citizen.name
     : request.citizen?.email?.split("@")[0] || "Citizen";
 
-  doc.fontSize(22).text(userName, {
+  doc.fontSize(26).text(userName.toUpperCase(), {
     align: "center",
     underline: true,
   });
 
-  doc.moveDown(0.5);
+  doc.moveDown(0.6);
 
-  doc.fontSize(12).text("has successfully applied for", {
-    align: "center",
-  });
-
-  doc.moveDown(0.5);
-
-  doc.fontSize(16).text(request.serviceType?.name, {
-    align: "center",
-  });
-
-  doc.moveDown(0.7);
-
+  // LINE 1
   doc
-    .fontSize(12)
-    .text("under the Government Service Portal.", { align: "center" });
+    .fontSize(14)
+    .text("is a registered citizen of India and has been duly issued the", {
+      align: "center",
+    });
 
-  // BOTTOM SECTION (MATCH FRONTEND)
-  const yPosition = 520;
+  doc.moveDown(0.5);
+
+  // SERVICE NAME
+  doc.fontSize(20).text(request.serviceType?.name.toUpperCase(), {
+    align: "center",
+  });
+
+  doc.moveDown(0.6);
+
+  // LINE 2
+  doc
+    .fontSize(14)
+    .text(
+      "through the Government Service Portal under the Ministry of Electronics and Information Technology, Government of India.",
+      { align: "center" },
+    );
+
+  doc.moveDown(0.5);
+
+  // FINAL LINE
+  doc
+    .fontSize(13)
+    .text(
+      "This certificate is digitally generated and is valid for official use as per applicable government guidelines.",
+      { align: "center" },
+    );
+  /* ================= BOTTOM SECTION ================= */
+  const yPosition = 540;
 
   // LEFT - QR
-  doc.image(qrImage, 80, yPosition, { width: 80 });
-  doc.fontSize(8).text("Scan to Verify", 80, yPosition + 85, {
-    width: 80,
+  doc.image(qrImage, 80, yPosition, { width: 90 });
+
+  doc.fontSize(9).text("Scan to Verify", 80, yPosition + 95, {
+    width: 90,
     align: "center",
   });
 
   // RIGHT - SIGNATURE
-  doc.text("____________________", 380, yPosition + 20);
-  doc.text("Authorized Officer", 380, yPosition + 40);
+  doc.text("____________________", 380, yPosition + 30);
+  doc.text("Authorized Officer", 380, yPosition + 50);
 
-  // END
+  /* ================= END ================= */
   doc.end();
 
   return {

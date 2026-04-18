@@ -23,17 +23,30 @@ function VerifyCertificate() {
   return (
     <div className="container mt-5 d-flex justify-content-center">
       <div
-        className="card shadow-lg p-4 text-center"
-        style={{ maxWidth: "500px", width: "100%" }}
+        className="card shadow-lg p-4 text-center border-0"
+        style={{
+          maxWidth: "600px",
+          width: "100%",
+          border: "2px solid #c9a646",
+          borderRadius: "12px",
+        }}
       >
-        <h2 className="text-success mb-3">✅ Certificate Verified</h2>
+        {/* HEADER */}
+        <h5 className="fw-bold text-primary mb-2">🇮🇳 Government of India</h5>
+        <p className="text-muted mb-3">Certificate Verification Portal</p>
+
+        <hr />
+
+        {/* STATUS */}
+        <h3 className="text-success mb-3">✔ Certificate Verified</h3>
 
         <p className="text-muted">
-          This certificate is valid and issued by Government Service Portal
+          This certificate is officially verified and valid.
         </p>
 
         <hr />
 
+        {/* DETAILS */}
         <div className="text-start mt-3">
           <p>
             <strong>👤 Name:</strong> {data.citizen?.name}
@@ -46,8 +59,14 @@ function VerifyCertificate() {
           </p>
         </div>
 
+        {/* BADGE */}
         <div className="mt-4">
-          <span className="badge bg-success px-3 py-2">✔ Verified</span>
+          <span
+            className="badge px-4 py-2"
+            style={{ background: "#0B3D91", fontSize: "14px" }}
+          >
+            ✔ Verified by Government Portal
+          </span>
         </div>
       </div>
     </div>

@@ -76,39 +76,35 @@ function App() {
         </div>
       </div>
       <Navbar />
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/login-otp" element={<LoginOTP />} />
-        <Route path="/verify-otp" element={<VerifyOTP />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
 
-        <Route
-          path="*"
-          element={
-            <div style={{ marginTop: "110px" }}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/my-requests" element={<MyRequests />} />
-                <Route path="/agent-dashboard" element={<AgentDashboard />} />
-                <Route path="/admin-dashboard" element={<AdminDashboard />} />
-                <Route path="/track" element={<TrackRequest />} />
-                <Route path="/manage-users" element={<ManageUsers />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/account-settings" element={<AccountSettings />} />
-                <Route path="/change-password" element={<ChangePassword />} />
-                <Route
-                  path="/verify/:certificateId"
-                  element={<VerifyCertificate />}
-                />
-              </Routes>
-            </div>
-          }
-        />
-      </Routes>
+      <div style={{ marginTop: "110px" }}>
+        <Routes>
+          {/* Public / Auth */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/login-otp" element={<LoginOTP />} />
+          <Route path="/verify-otp" element={<VerifyOTP />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+
+          {/* Main App */}
+          <Route path="/" element={<Home />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/my-requests" element={<MyRequests />} />
+          <Route path="/agent-dashboard" element={<AgentDashboard />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/track" element={<TrackRequest />} />
+          <Route path="/manage-users" element={<ManageUsers />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/account-settings" element={<AccountSettings />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route
+            path="/verify/:certificateId"
+            element={<VerifyCertificate />}
+          />
+        </Routes>
+      </div>
       <Footer />
     </>
   );

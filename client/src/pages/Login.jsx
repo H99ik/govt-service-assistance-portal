@@ -70,155 +70,146 @@ function Login() {
     <div
       style={{
         minHeight: "100vh",
+        position: "relative",
+        background: "linear-gradient(135deg, #e3f2fd, #ffffff)",
         display: "flex",
-        backgroundColor: "#f4f6f9",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        paddingLeft: "160px",
       }}
     >
+      {/* BACKGROUND IMAGE */}
+      <img
+        src="/src/assets/National-Emblem.png"
+        alt="bg"
+        style={{
+          position: "absolute",
+          right: "95px",
+          top: "50%",
+          transform: "translateY(-50%)",
+          width: "295px",
+          opacity: 0.08,
+          pointerEvents: "none",
+        }}
+      />
+
       {/* LEFT SIDE - LOGIN */}
+
       <div
+        className="card shadow-lg border-0"
         style={{
-          flex: 1,
-          width: "50%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          width: "380px",
+          padding: "25px",
+          backgroundColor: "rgba(255, 255, 255, 0.85)",
+          backdropFilter: "blur(10px)",
+          borderRadius: "16px",
+          boxShadow: "0 15px 40px rgba(0,0,0,0.1)",
         }}
       >
-        <div
-          className="card shadow-lg border-0"
-          style={{
-            width: "380px",
-            padding: "25px",
-            borderRadius: "12px",
-            backgroundColor: "rgba(255, 255, 255, 0.95)",
-            backdropFilter: "blur(5px)",
-          }}
-        >
-          {/* HEADER */}
-          <div className="text-center mb-3">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/120px-Emblem_of_India.svg.png"
-              alt="logo"
-              style={{ height: "50px" }}
-            />
-            <h5 className="mt-2 mb-0 fw-bold">Government Service Portal</h5>
-            <small className="text-muted">Secure Login</small>
-          </div>
-
-          <h3 className="text-center mb-3 fw-bold">Login</h3>
-
-          {/* EMAIL */}
-          <div className="mb-3">
-            <input
-              type="email"
-              name="email"
-              className="form-control"
-              placeholder="Enter Email"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          {/* PASSWORD */}
-          <div className="mb-3 position-relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              className="form-control"
-              placeholder="Enter Password"
-              onChange={handleChange}
-              required
-            />
-
-            <i
-              className={`bi ${
-                showPassword ? "bi-eye-slash" : "bi-eye"
-              } position-absolute`}
-              style={{
-                top: "50%",
-                right: "15px",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-                color: "#555",
-              }}
-              onClick={() => setShowPassword(!showPassword)}
-            ></i>
-          </div>
-
-          {/* LOGIN BUTTON */}
-          <button
-            className="btn btn-success w-100 fw-semibold"
-            onClick={handleLogin}
-          >
-            Login
-          </button>
-
-          {/* OTP SECTION */}
-          {otpSent && (
-            <div className="mt-3">
-              <input
-                type="text"
-                placeholder="Enter OTP"
-                className="form-control mb-2"
-                onChange={(e) => setOtp(e.target.value)}
-              />
-
-              <button
-                className="btn btn-primary w-100 fw-semibold"
-                onClick={verifyOtp}
-              >
-                Verify & Login
-              </button>
-            </div>
-          )}
-
-          {/* PHONE OTP */}
-          {!otpSent && (
-            <button
-              className="btn btn-outline-primary mt-3 w-100"
-              onClick={() => navigate("/login-otp")}
-            >
-              📱 Login with Phone OTP
-            </button>
-          )}
-
-          {/* LINKS */}
-          <p className="text-center mt-3 mb-1">
-            <span
-              style={{ cursor: "pointer", color: "#0d6efd" }}
-              onClick={() => navigate("/forgot-password")}
-            >
-              Forgot Password?
-            </span>
-          </p>
-
-          <p className="text-center small">
-            Don’t have an account?{" "}
-            <a href="/register" className="fw-bold text-primary">
-              Register
-            </a>
-          </p>
+        {/* HEADER */}
+        <div className="text-center mb-3">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/120px-Emblem_of_India.svg.png"
+            alt="logo"
+            style={{ height: "50px" }}
+          />
+          <h5 className="mt-2 mb-0 fw-bold">Government Service Portal</h5>
+          <small className="text-muted">Secure Login</small>
         </div>
-      </div>
 
-      {/* RIGHT SIDE - TRANSPARENT IMAGE */}
-      <div
-        style={{
-          width: "55%",
-          backgroundColor: "#e9ecef", 
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/512px-Emblem_of_India.svg.png"
-          alt="gov"
-          style={{
-            width: "300px",
-            opacity: 0.15,
-          }}
-        />
+        <h3 className="text-center mb-3 fw-bold">Login</h3>
+
+        {/* EMAIL */}
+        <div className="mb-3">
+          <input
+            type="email"
+            name="email"
+            className="form-control"
+            placeholder="Enter Email"
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {/* PASSWORD */}
+        <div className="mb-3 position-relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            className="form-control"
+            placeholder="Enter Password"
+            onChange={handleChange}
+            required
+          />
+
+          <i
+            className={`bi ${
+              showPassword ? "bi-eye-slash" : "bi-eye"
+            } position-absolute`}
+            style={{
+              top: "50%",
+              right: "15px",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+              color: "#555",
+            }}
+            onClick={() => setShowPassword(!showPassword)}
+          ></i>
+        </div>
+
+        {/* LOGIN BUTTON */}
+        <button
+          className="btn btn-primary w-100 fw-semibold"
+          onClick={handleLogin}
+        >
+          Login
+        </button>
+
+        {/* OTP SECTION */}
+        {otpSent && (
+          <div className="mt-3">
+            <input
+              type="text"
+              placeholder="Enter OTP"
+              className="form-control mb-2"
+              onChange={(e) => setOtp(e.target.value)}
+            />
+
+            <button
+              className="btn btn-primary w-100 fw-semibold"
+              onClick={verifyOtp}
+            >
+              Verify & Login
+            </button>
+          </div>
+        )}
+
+        {/* PHONE OTP */}
+        {!otpSent && (
+          <button
+            className="btn btn-outline-primary mt-3 w-100"
+            onClick={() => navigate("/login-otp")}
+          >
+            📱 Login with Phone OTP
+          </button>
+        )}
+
+        {/* LINKS */}
+        <p className="text-center mt-3 mb-1">
+          <span
+            style={{ cursor: "pointer", color: "#0d6efd" }}
+            onClick={() => navigate("/forgot-password")}
+          >
+            Forgot Password?
+          </span>
+        </p>
+
+        <p className="text-center small">
+          Don’t have an account?{" "}
+          <a href="/register" className="fw-bold text-primary">
+            Register
+          </a>
+        </p>
       </div>
     </div>
   );

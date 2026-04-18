@@ -21,6 +21,8 @@ const {
 const { protect } = require("../middleware/authMiddleware");
 const adminProtect = require("../middleware/adminMiddleware");
 
+const { uploadAvatar } = require("../controllers/authController");
+
 // Auth routes
 router.post("/register", register);
 router.post("/login", login);
@@ -31,6 +33,7 @@ router.post("/resend-otp", resendOtp);
 router.post("/forgot-password", forgotPassword);
 router.post("/verify-reset-otp", verifyResetOtp);
 router.post("/reset-password", resetPassword);
+router.post("/upload-avatar", protect, uploadAvatar);
 
 // Admin routes
 router.get("/all-requests", protect, adminProtect, getAllRequests);

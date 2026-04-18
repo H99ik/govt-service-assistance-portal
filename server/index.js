@@ -29,6 +29,7 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/users", userRoutes);
 
 
+
 // Basic Route
 app.get("/", (req, res) => {
   res.send("Official Government Service Portal API is Running...");

@@ -14,12 +14,9 @@ function Profile() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/users/profile",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await axios.get("http://localhost:5000/api/users/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       setUser(res.data.user);
     } catch (error) {
@@ -50,7 +47,7 @@ function Profile() {
         },
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       alert("Profile updated");
@@ -62,17 +59,86 @@ function Profile() {
 
   return (
     <div className="container mt-5">
-      <div className="card p-4 shadow-lg rounded-4" style={{ maxWidth: "500px", margin: "auto" }}>
+      <div
+        className="card p-4 shadow-lg rounded-4"
+        style={{ maxWidth: "500px", margin: "auto" }}
+      >
+        {/* 🔥 PROFILE HEADER */}
         <div className="text-center mb-3">
-          <img
-            src="https://i.pravatar.cc/100"
-            className="rounded-circle mb-3"
-            alt="avatar"
-          />
-          <h4>{user.name}</h4>
+          {/* Avatar with edit icon */}
+          <div style={{ position: "relative", display: "inline-block" }}>
+            <img
+              src={
+                user.avatar
+                  ? `http://localhost:5000${user.avatar}`
+                  : "https://i.pravatar.cc/100"
+              }
+              className="rounded-circle"
+              alt="avatar"
+              width="100"
+              height="100"
+            />
+
+            {editMode && (
+              <label
+                style={{
+                  position: "absolute",
+                  bottom: "5px",
+                  right: "5px",
+                  background: "#0B3D91",
+                  color: "white",
+                  borderRadius: "50%",
+                  padding: "6px 8px",
+                  fontSize: "12px",
+                  cursor: "pointer",
+                }}
+              >
+                ✏️
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const formData = new FormData();
+                    formData.append("avatar", file);
+
+                    const token = localStorage.getItem("token");
+
+                    try {
+                      const res = await axios.post(
+                        "http://localhost:5000/api/auth/upload-avatar",
+                        formData,
+                        {
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "multipart/form-data",
+                          },
+                        },
+                      );
+
+                      const updatedUser = {
+                        ...user,
+                        avatar: res.data.avatar,
+                      };
+
+                      setUser(updatedUser);
+                      localStorage.setItem("user", JSON.stringify(updatedUser));
+                    } catch (err) {
+                      alert("Upload failed");
+                    }
+                  }}
+                />
+              </label>
+            )}
+          </div>
+
+          <h4 className="mt-2">{user.name}</h4>
           <p className="text-muted">{user.email}</p>
         </div>
 
+        {/* 🔥 FORM */}
         <div className="mb-3">
           <label>Name</label>
           <input
@@ -97,6 +163,7 @@ function Profile() {
           />
         </div>
 
+        {/* 🔥 BUTTON */}
         {!editMode ? (
           <button
             className="btn btn-primary w-100 rounded-3 fw-semibold"

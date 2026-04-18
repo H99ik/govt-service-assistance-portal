@@ -5,7 +5,9 @@ import axios from "axios";
 function Navbar() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user") || "null"),
+  );
 
   const [notifications, setNotifications] = useState([]);
 
@@ -40,6 +42,16 @@ function Navbar() {
       return () => clearInterval(interval);
     }
   }, [localStorage.getItem("token")]); // refetch when token changes
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const updatedUser = JSON.parse(localStorage.getItem("user"));
+      setUser(updatedUser);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -115,7 +127,7 @@ function Navbar() {
         {/* If user logged in */}
         {token && user ? (
           <>
-            <Link to="/my-requests" className="nav-link text-dark fw-semibold">
+            <Link to="/my-requests" className="nav-link text-white fw-semibold">
               My Requests
             </Link>
 
@@ -182,7 +194,11 @@ function Navbar() {
             {/* Profile */}
             <div className="dropdown">
               <img
-                src="https://i.pravatar.cc/40"
+                src={
+                  user?.avatar
+                    ? `http://localhost:5000${user.avatar}`
+                    : "https://i.pravatar.cc/40"
+                }
                 alt="profile"
                 className="rounded-circle"
                 width="36"
@@ -212,7 +228,7 @@ function Navbar() {
                 <li>
                   <button
                     className="dropdown-item"
-                    onClick={() => navigate("/profile")}
+                    onClick={() => navigate("/account-settings")}
                   >
                     Account Settings
                   </button>

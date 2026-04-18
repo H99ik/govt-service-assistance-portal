@@ -2,6 +2,19 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
 exports.register = async (req, res) => {
   try {
     const { name, email, password, phone } = req.body;
@@ -277,6 +290,7 @@ exports.verifyLoginOtp = async (req, res) => {
         id: user._id,
         name: user.name,
         role: user.role,
+        avatar: user.avatar,
       },
     });
   } catch (error) {
@@ -391,3 +405,27 @@ exports.resetPassword = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.uploadAvatar = [
+  upload.single("avatar"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const user = await User.findById(req.user.id);
+
+      user.avatar = `/uploads/${req.file.filename}`;
+      await user.save();
+
+      res.json({
+        success: true,
+        avatar: user.avatar,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "Upload failed" });
+    }
+  },
+];

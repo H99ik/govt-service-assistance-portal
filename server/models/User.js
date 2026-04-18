@@ -42,6 +42,11 @@ const UserSchema = new mongoose.Schema({
     enum: ["citizen", "agent", "admin"],
     default: "citizen",
   },
+
+  avatar: {
+    type: String,
+    default: "https://i.pravatar.cc/100",
+  },
   // Only for Agents
 
   isVerifiedAgent: {
@@ -70,7 +75,6 @@ const UserSchema = new mongoose.Schema({
       type: String,
     },
   ],
-  
 });
 
 module.exports = mongoose.model("User", UserSchema);

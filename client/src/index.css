@@ -3,19 +3,23 @@ body {
   font-family: Arial, sans-serif;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   width: 100%;
   height: 100%;
 }
 
 .service-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .service-card:hover {
   transform: translateY(-5px);
   transition: 0.3s ease;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 /* Notification Scrollbar */
@@ -29,10 +33,14 @@ html, body, #root {
 }
 
 .dropdown-menu::-webkit-scrollbar-thumb {
-  background: #0B3D91;
+  background: #0b3d91;
   border-radius: 10px;
 }
 
 .dropdown-menu::-webkit-scrollbar-thumb:hover {
   background: #082c6c;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
 }

@@ -43,7 +43,6 @@ function Navbar() {
     }
   }, [localStorage.getItem("token")]); // refetch when token changes
 
-
   useEffect(() => {
     const interval = setInterval(() => {
       const updatedUser = JSON.parse(localStorage.getItem("user"));
@@ -110,14 +109,26 @@ function Navbar() {
       <div className="collapse navbar-collapse">
         <ul className="navbar-nav ms-4">
           <li className="nav-item">
-            <Link to="/" className="nav-link text-white">
+            <Link to="/" className="nav-link text-white mx-2">
               Home
             </Link>
           </li>
 
           <li className="nav-item">
-            <Link to="/services" className="nav-link text-white">
+            <Link to="/services" className="nav-link text-white mx-2">
               Services
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link to="/about" className="nav-link text-white mx-2">
+              About
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link to="/contact" className="nav-link text-white mx-2">
+              Contact
             </Link>
           </li>
         </ul>

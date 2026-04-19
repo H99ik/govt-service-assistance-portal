@@ -279,7 +279,7 @@ const generateCertificate = async (request) => {
 
   const doc = new PDFDocument({
     size: "A4",
-    margin: 30,
+    margin: 35,
   });
 
   doc.pipe(fs.createWriteStream(filePath));

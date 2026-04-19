@@ -9,7 +9,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Home from "./pages/Home";
 import VerifyCertificate from "./pages/VerifyCertificate";
 import Footer from "./components/Footer";
-import DigitalIndiaLogo from "./assets/digital_india.png.png";
+import DigitalIndiaLogo from "./assets/digital_india.png";
 import TrackRequest from "./pages/TrackRequest";
 import VerifyOTP from "./pages/VerifyOTP";
 import LoginOTP from "./pages/LoginOTP";

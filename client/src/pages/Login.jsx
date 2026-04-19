@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Emblem from "../assets/National-Emblem.png";
 
 function Login() {
   const [otpSent, setOtpSent] = useState(false);
@@ -83,7 +84,7 @@ function Login() {
     >
       {/* BACKGROUND IMAGE */}
       <img
-        src="/src/assets/National-Emblem.png"
+        src= {Emblem}
         alt="bg"
         style={{
           position: "absolute",

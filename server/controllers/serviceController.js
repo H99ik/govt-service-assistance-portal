@@ -274,7 +274,7 @@ const generateCertificate = async (request) => {
     `${certificateId}.pdf`,
   );
 
-  const qrData = `http://localhost:5173/verify/${certificateId}`;
+  const qrData = `https://govt-service-assistance-portal.vercel.app/verify/${certificateId}`;
   const qrImage = await QRCode.toDataURL(qrData);
 
   const doc = new PDFDocument({

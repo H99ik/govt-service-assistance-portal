@@ -78,7 +78,7 @@ function CertificateView({ data }) {
         {/* LEFT - QR */}
         <div style={{ textAlign: "center" }}>
           <QRCodeCanvas
-            value={`http://localhost:5173/verify/${data.certificateId}`}
+            value={`https://govt-service-assistance-portal.vercel.app/verify/${data.certificateId}`}
             size={80}
           />
           <p style={{ fontSize: "11px", marginTop: "5px" }}>Scan to Verify</p>

@@ -11,7 +11,7 @@ function VerifyLoginOTP() {
   const handleVerify = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/verify-otp-login",
+        "https://govt-service-assistance-portal.onrender.com/api/auth/verify-otp-login",
         { email, otp },
       );
 

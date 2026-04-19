@@ -8,17 +8,20 @@ function ResetPassword() {
   const navigate = useNavigate();
 
   const email = location.state?.email;
-  
+
   if (!email) {
     return <p>Invalid access. Please try again.</p>;
   }
 
   const handleReset = async () => {
     try {
-      await axios.post("http://localhost:5000/api/auth/reset-password", {
-        email,
-        password,
-      });
+      await axios.post(
+        "https://govt-service-assistance-portal.onrender.com/api/auth/reset-password",
+        {
+          email,
+          password,
+        },
+      );
 
       alert("Password updated!");
       navigate("/login");

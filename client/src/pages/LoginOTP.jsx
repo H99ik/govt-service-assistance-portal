@@ -16,9 +16,12 @@ function LoginOTP() {
 
     try {
       console.log("Send OTP clicked", phone);
-      await axios.post("http://localhost:5000/api/auth/login-otp", {
-        phone,
-      });
+      await axios.post(
+        "https://govt-service-assistance-portal.onrender.com/api/auth/login-otp",
+        {
+          phone,
+        },
+      );
       alert("OTP sent!");
       setOtpSent(true);
       setAttempts(0);
@@ -37,7 +40,7 @@ function LoginOTP() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/verify-otp-login",
+        "https://govt-service-assistance-portal.onrender.com/api/auth/verify-otp-login",
         {
           phone,
           otp,

@@ -22,8 +22,17 @@ import AccountSettings from "./pages/AccountSettings";
 import ChangePassword from "./pages/ChangePassword";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [fontSize, setFontSize] = useState(
+    localStorage.getItem("fontSize") || 14,
+  );
+
+  useEffect(() => {
+    localStorage.setItem("fontSize", fontSize);
+  }, [fontSize]);
+
   return (
     <>
       {/* 🔥 TOP BAR */}
@@ -32,8 +41,15 @@ function App() {
         style={{ background: "#f1f1f1", fontSize: "14px" }}
       >
         <div>📞 Helpdesk 123456 | Working Hours: 9:30 AM - 6:00 PM</div>
-        <div>Text Size: A- A A+</div>
+
+        <div className="d-flex align-items-center gap-2 top-text-size">
+          <span>Text Size:</span>
+          <span onClick={() => setFontSize(12)}>A-</span>
+          <span onClick={() => setFontSize(14)}>A</span>
+          <span onClick={() => setFontSize(18)}>A+</span>
+        </div>
       </div>
+
       {/* 🔥 GOV HEADER FINAL */}
       <div
         className="container-fluid py-2"
@@ -79,7 +95,7 @@ function App() {
       </div>
       <Navbar />
 
-      <div style={{ marginTop: "110px" }}>
+      <div style={{ marginTop: "110px", fontSize: `${fontSize}px` }}>
         <Routes>
           {/* Public / Auth */}
           <Route path="/login" element={<Login />} />

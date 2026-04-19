@@ -16,7 +16,7 @@ function MyRequests() {
 
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/services/my-requests",
+        "https://govt-service-assistance-portal.onrender.com/api/services/my-requests",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,7 +43,7 @@ function MyRequests() {
 
     try {
       await axios.post(
-        `http://localhost:5000/api/services/upload/${requestId}`,
+        `https://govt-service-assistance-portal.onrender.com/api/services/upload/${requestId}`,
         formData,
         {
           headers: {
@@ -138,7 +138,7 @@ function MyRequests() {
 
                   <div className="d-flex gap-2 mt-2 flex-wrap">
                     {req.documents.map((doc, index) => {
-                      const fileUrl = `http://localhost:5000/uploads/${doc}`;
+                      const fileUrl = `https://govt-service-assistance-portal.onrender.com/uploads/${doc}`;
 
                       return (
                         <div key={index} className="d-flex gap-2">
@@ -169,7 +169,7 @@ function MyRequests() {
 
               {req.status === "Completed" && req.certificateUrl && (
                 <a
-                  href={`http://localhost:5000/${req.certificateUrl}`}
+                  href={`https://govt-service-assistance-portal.onrender.com/${req.certificateUrl}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-success mt-2"

@@ -35,10 +35,13 @@ function VerifyOTP() {
 
   const handleVerify = async () => {
     try {
-      await axios.post("http://localhost:5000/api/auth/verify-otp", {
-        email,
-        otp,
-      });
+      await axios.post(
+        "https://govt-service-assistance-portal.onrender.com/api/auth/verify-otp",
+        {
+          email,
+          otp,
+        },
+      );
 
       localStorage.removeItem("email");
       localStorage.removeItem("phone");
@@ -52,9 +55,12 @@ function VerifyOTP() {
 
   const handleResend = async () => {
     try {
-      await axios.post("http://localhost:5000/api/auth/resend-otp", {
-        email,
-      });
+      await axios.post(
+        "https://govt-service-assistance-portal.onrender.com/api/auth/resend-otp",
+        {
+          email,
+        },
+      );
 
       setTimer(30);
       setCanResend(false);

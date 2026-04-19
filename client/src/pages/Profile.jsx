@@ -14,9 +14,12 @@ function Profile() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await axios.get("http://localhost:5000/api/users/profile", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        "https://govt-service-assistance-portal.onrender.com/api/users/profile",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       setUser(res.data.user);
     } catch (error) {
@@ -40,7 +43,7 @@ function Profile() {
 
     try {
       await axios.put(
-        "http://localhost:5000/api/users/profile",
+        "https://govt-service-assistance-portal.onrender.com/api/users/profile",
         {
           name: user.name,
           phone: user.phone,
@@ -70,7 +73,7 @@ function Profile() {
             <img
               src={
                 user.avatar
-                  ? `http://localhost:5000${user.avatar}`
+                  ? `https://govt-service-assistance-portal.onrender.com${user.avatar}`
                   : "https://i.pravatar.cc/100"
               }
               className="rounded-circle"
@@ -108,7 +111,7 @@ function Profile() {
 
                     try {
                       const res = await axios.post(
-                        "http://localhost:5000/api/auth/upload-avatar",
+                        "https://govt-service-assistance-portal.onrender.com/api/auth/upload-avatar",
                         formData,
                         {
                           headers: {

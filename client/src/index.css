@@ -10,16 +10,46 @@ body,
   height: 100%;
 }
 
-.service-card {
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-.service-card:hover {
-  transform: translateY(-5px);
-  transition: 0.3s ease;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #0b3d91;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #082c6c;
+}
+
+/* Top Bar Text Size */
+.top-text-size span {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.top-text-size span:nth-child(2) {
+  font-size: 12px;
+}
+
+.top-text-size span:nth-child(3) {
+  font-size: 14px;
+}
+
+.top-text-size span:nth-child(4) {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.top-text-size span:hover {
+  color: #0b3d91;
+  text-decoration: underline;
+  transform: scale(1.1);
 }
 
 /* Notification Scrollbar */
@@ -43,4 +73,17 @@ body,
 
 .nav-link:hover {
   text-decoration: underline;
+}
+
+/* card section */
+.service-card {
+  transition:
+    all 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  transition: 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }

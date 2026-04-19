@@ -15,10 +15,13 @@ function VerifyResetOtp() {
 
   const handleVerify = async () => {
     try {
-      await axios.post("http://localhost:5000/api/auth/verify-reset-otp", {
-        email,
-        otp,
-      });
+      await axios.post(
+        "https://govt-service-assistance-portal.onrender.com/api/auth/verify-reset-otp",
+        {
+          email,
+          otp,
+        },
+      );
 
       navigate("/reset-password", { state: { email } });
     } catch (err) {

@@ -24,10 +24,13 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
-        email: formData.email,
-        password: formData.password,
-      });
+      const res = await axios.post(
+        "https://govt-service-assistance-portal.onrender.com/api/auth/login",
+        {
+          email: formData.email,
+          password: formData.password,
+        },
+      );
 
       alert("OTP sent!");
       setOtpSent(true);
@@ -49,7 +52,7 @@ function Login() {
   const verifyOtp = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/verify-otp-login",
+        "https://govt-service-assistance-portal.onrender.com/api/auth/verify-otp-login",
         { email: formData.email, otp },
       );
 

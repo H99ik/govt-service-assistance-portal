@@ -8,9 +8,12 @@ function ForgotPassword() {
 
   const handleSubmit = async () => {
     try {
-      await axios.post("http://localhost:5000/api/auth/forgot-password", {
-        email,
-      });
+      await axios.post(
+        "https://govt-service-assistance-portal.onrender.com/api/auth/forgot-password",
+        {
+          email,
+        },
+      );
 
       alert("OTP sent! Check console 😄");
       navigate("/verify-reset-otp", { state: { email } });

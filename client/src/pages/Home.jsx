@@ -13,7 +13,9 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/services/stats")
+      .get(
+        "https://govt-service-assistance-portal.onrender.com/api/services/stats",
+      )
       .then((res) => setStats(res.data))
       .catch((err) => console.log(err));
   }, []);

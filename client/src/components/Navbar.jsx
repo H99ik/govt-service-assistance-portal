@@ -18,7 +18,7 @@ function Navbar() {
 
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/notifications/my",
+        "https://govt-service-assistance-portal.onrender.com/api/notifications/my",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ function Navbar() {
 
     try {
       await axios.put(
-        "http://localhost:5000/api/notifications/mark-read",
+        "https://govt-service-assistance-portal.onrender.com/api/notifications/mark-read",
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -207,7 +207,7 @@ function Navbar() {
               <img
                 src={
                   user?.avatar
-                    ? `http://localhost:5000${user.avatar}`
+                    ? `https://govt-service-assistance-portal.onrender.com${user.avatar}`
                     : "https://i.pravatar.cc/40"
                 }
                 alt="profile"

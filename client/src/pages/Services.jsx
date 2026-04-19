@@ -10,7 +10,9 @@ function Services() {
 
   const fetchServices = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/services");
+      const response = await axios.get(
+        "https://govt-service-assistance-portal.onrender.com/api/services",
+      );
       setServices(response.data.data);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -27,7 +29,7 @@ function Services() {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/services/request",
+        "https://govt-service-assistance-portal.onrender.com/api/services/request",
         {
           serviceType: serviceId,
           description: "Requested via portal",

@@ -20,11 +20,11 @@ function ChangePassword() {
 
     try {
       await axios.put(
-        "http://localhost:5000/api/users/change-password",
+        "https://govt-service-assistance-portal.onrender.com/api/users/change-password",
         form,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       alert("Password changed successfully 😌");
@@ -67,9 +67,7 @@ function ChangePassword() {
             />
           </div>
 
-          <button className="btn btn-primary w-100">
-            Update Password
-          </button>
+          <button className="btn btn-primary w-100">Update Password</button>
         </form>
       </div>
     </div>

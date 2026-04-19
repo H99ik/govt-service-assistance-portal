@@ -18,7 +18,7 @@ function AgentDashboard() {
 
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/services/pending",
+        "https://govt-service-assistance-portal.onrender.com/api/services/pending",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -41,7 +41,7 @@ function AgentDashboard() {
 
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/services/my-assigned",
+        "https://govt-service-assistance-portal.onrender.com/api/services/my-assigned",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -61,7 +61,7 @@ function AgentDashboard() {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/services/accept/${id}`,
+        `https://govt-service-assistance-portal.onrender.com/api/services/accept/${id}`,
         {},
         {
           headers: {
@@ -87,7 +87,7 @@ function AgentDashboard() {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/services/update-status/${id}`,
+        `https://govt-service-assistance-portal.onrender.com/api/services/update-status/${id}`,
         { status },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -135,7 +135,7 @@ function AgentDashboard() {
                   {req.documents.map((doc, index) => (
                     <div key={index}>
                       <a
-                        href={`http://localhost:5000/uploads/${doc}`}
+                        href={`https://govt-service-assistance-portal.onrender.com/uploads/${doc}`}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -203,7 +203,7 @@ function AgentDashboard() {
                 {req.documents.map((doc, index) => (
                   <div key={index}>
                     <a
-                      href={`http://localhost:5000/uploads/${doc}`}
+                      href={`https://govt-service-assistance-portal.onrender.com/uploads/${doc}`}
                       target="_blank"
                       rel="noreferrer"
                     >

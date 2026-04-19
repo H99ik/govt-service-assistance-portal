@@ -8,7 +8,7 @@ function TrackRequest() {
   const handleSearch = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/services/track/${trackingId}`,
+        `https://govt-service-assistance-portal.onrender.com/api/services/track/${trackingId}`,
       );
       setData(res.data);
     } catch (err) {

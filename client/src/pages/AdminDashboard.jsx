@@ -25,7 +25,7 @@ function AdminDashboard() {
 
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/services/admin-requests",
+        "https://govt-service-assistance-portal.onrender.com/api/services/admin-requests",
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -50,7 +50,7 @@ function AdminDashboard() {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/services",
+        "https://govt-service-assistance-portal.onrender.com/api/services",
         {
           ...serviceData,
           requiredDocuments: serviceData.requiredDocuments.split(","),
@@ -79,7 +79,9 @@ function AdminDashboard() {
 
   const fetchServices = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/services");
+      const res = await axios.get(
+        "https://govt-service-assistance-portal.onrender.com/api/services",
+      );
       setServices(res.data.data);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -92,9 +94,12 @@ function AdminDashboard() {
     if (!window.confirm("Delete this service?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/services/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `https://govt-service-assistance-portal.onrender.com/api/services/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       alert("Service deleted");
       fetchServices();
@@ -108,7 +113,7 @@ function AdminDashboard() {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/services/update-status/${id}`,
+        `https://govt-service-assistance-portal.onrender.com/api/services/update-status/${id}`,
         { status },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -271,7 +276,7 @@ function AdminDashboard() {
                     {req.documents.map((doc, index) => (
                       <div key={index}>
                         <a
-                          href={`http://localhost:5000/uploads/${doc}`}
+                          href={`https://govt-service-assistance-portal.onrender.com/uploads/${doc}`}
                           target="_blank"
                           rel="noreferrer"
                         >

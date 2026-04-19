@@ -8,7 +8,9 @@ function VerifyCertificate() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/services/verify/${certificateId}`)
+      .get(
+        `https://govt-service-assistance-portal.onrender.com/api/services/verify/${certificateId}`,
+      )
       .then((res) => setData(res.data.data))
       .catch((err) => console.log(err));
   }, [certificateId]);

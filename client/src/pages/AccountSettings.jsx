@@ -24,7 +24,7 @@ function AccountSettings() {
           <img
             src={
               user?.avatar
-                ? `http://localhost:5000${user.avatar}`
+                ? `https://govt-service-assistance-portal.onrender.com${user.avatar}`
                 : "https://i.pravatar.cc/100"
             }
             className="rounded-circle mb-2"

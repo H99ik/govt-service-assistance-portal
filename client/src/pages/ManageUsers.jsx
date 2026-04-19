@@ -8,9 +8,12 @@ function ManageUsers() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await axios.get("http://localhost:5000/api/users", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        "https://govt-service-assistance-portal.onrender.com/api/users",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       setUsers(res.data.users);
     } catch (error) {
@@ -27,7 +30,7 @@ function ManageUsers() {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/users/${id}/role`,
+        `https://govt-service-assistance-portal.onrender.com/api/users/${id}/role`,
         { role },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -47,9 +50,12 @@ function ManageUsers() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/users/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `https://govt-service-assistance-portal.onrender.com/api/users/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       alert("User deleted");
       fetchUsers();

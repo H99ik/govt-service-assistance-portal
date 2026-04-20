@@ -8,14 +8,25 @@ function ForgotPassword() {
 
   const handleSubmit = async () => {
     try {
-      await axios.post(
+      const res = await axios.post(
         "https://govt-service-assistance-portal.onrender.com/api/auth/forgot-password",
         {
           email,
         },
       );
 
-      alert("OTP sent! Check console 😄");
+      // 🔥 GET OTP
+      const otpValue = res.data?.otp;
+
+      console.log("FORGOT OTP:", otpValue);
+
+      // 🔥 SHOW OTP
+      if (otpValue) {
+        alert(`Your OTP is ${otpValue}`);
+      } else {
+        alert("OTP sent! Check your email/phone");
+      }
+
       navigate("/verify-reset-otp", { state: { email } });
     } catch (err) {
       alert(err.response?.data?.message || "Error");

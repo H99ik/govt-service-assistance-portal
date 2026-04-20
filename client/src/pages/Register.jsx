@@ -56,10 +56,19 @@ function Register() {
         return;
       }
 
+      const otpValue = res.data?.otp;
+
+      console.log("REGISTER OTP:", otpValue);
+
+      if (otpValue) {
+        alert(`Your OTP is ${otpValue}`);
+      } else {
+        alert("OTP sent! Please check your email/phone.");
+      }
+
       localStorage.setItem("email", formData.email);
       localStorage.setItem("phone", formData.phone);
 
-      alert("OTP sent! Please verify your account.");
       setTimeout(() => {
         navigate("/verify-otp");
       }, 100);

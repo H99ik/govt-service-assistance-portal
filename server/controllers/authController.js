@@ -88,6 +88,7 @@ exports.register = async (req, res) => {
       success: true,
       message: "OTP sent to your mobile. Please verify your account.",
       role: user.role,
+      otp: otp, 
     });
   } catch (err) {
     //res.status(500).json({ message: "Server error", error: err.message });
@@ -354,6 +355,7 @@ exports.forgotPassword = async (req, res) => {
 
     res.json({
       message: "OTP sent",
+      otp: otp, // 🔥 needed for frontend display
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -408,7 +410,7 @@ exports.resetPassword = async (req, res) => {
 
     await user.save();
 
-    res.json({ message: "Password reset successful" });
+    res.json({ message: "Password reset successful", otp: otp });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

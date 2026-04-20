@@ -7,6 +7,7 @@ function LoginOTP() {
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [attempts, setAttempts] = useState(0);
+  const [showOtp, setShowOtp] = useState("");
   const navigate = useNavigate();
 
   const sendOtp = async () => {
@@ -16,19 +17,23 @@ function LoginOTP() {
 
     try {
       console.log("Send OTP clicked", phone);
-      await axios.post(
+
+      const res = await axios.post(
         "https://govt-service-assistance-portal.onrender.com/api/auth/login-otp",
-        {
-          phone,
-        },
+        { phone },
       );
+
+      // 🔥 SHOW OTP FOR 10 SEC (fallback)
+      if (res.data.otp) {
+        setShowOtp(res.data.otp);
+        setTimeout(() => setShowOtp(""), 10000);
+      }
+
       alert("OTP sent!");
       setOtpSent(true);
       setAttempts(0);
     } catch (err) {
       console.log("FULL ERROR:", err.response);
-      console.log("DATA:", err.response?.data);
-
       alert(err.response?.data?.message || "Error sending OTP");
     }
   };
@@ -41,10 +46,7 @@ function LoginOTP() {
     try {
       const res = await axios.post(
         "https://govt-service-assistance-portal.onrender.com/api/auth/verify-otp-login",
-        {
-          phone,
-          otp,
-        },
+        { phone, otp },
       );
 
       localStorage.setItem("token", res.data.token);
@@ -52,16 +54,12 @@ function LoginOTP() {
 
       const user = res.data.user;
 
-      if (user.role === "admin") {
-        navigate("/admin-dashboard");
-      } else if (user.role === "agent") {
-        navigate("/agent-dashboard");
-      } else {
-        navigate("/"); // citizen
-      }
+      if (user.role === "admin") navigate("/admin-dashboard");
+      else if (user.role === "agent") navigate("/agent-dashboard");
+      else navigate("/");
     } catch (err) {
       setAttempts(attempts + 1);
-      alert(err.response?.data?.message || "invalid OTP");
+      alert(err.response?.data?.message || "Invalid OTP");
     }
   };
 
@@ -69,6 +67,7 @@ function LoginOTP() {
     <div className="container mt-5">
       <h3>Login with OTP</h3>
 
+      {/* PHONE INPUT */}
       <input
         type="text"
         placeholder="Enter Phone"
@@ -76,21 +75,19 @@ function LoginOTP() {
         onChange={(e) => setPhone(e.target.value)}
       />
 
+      {/* SEND OTP */}
       <button className="btn btn-primary mb-2" onClick={sendOtp}>
         Send OTP
       </button>
 
-      <input
-        type="text"
-        placeholder="Enter OTP"
-        className="form-control mb-2"
-        onChange={(e) => setOtp(e.target.value)}
-      />
+      {/* 🔥 SHOW OTP */}
+      {showOtp && (
+        <div className="alert alert-warning text-center">
+          Your OTP is: <strong>{showOtp}</strong> (valid for 10 sec)
+        </div>
+      )}
 
-      <button className="btn btn-success" onClick={verifyOtp}>
-        Login
-      </button>
-
+      {/* OTP SECTION */}
       {otpSent && (
         <>
           <input
@@ -100,8 +97,13 @@ function LoginOTP() {
             onChange={(e) => setOtp(e.target.value)}
           />
 
-          <button className="btn btn-success" onClick={verifyOtp}>
+          <button className="btn btn-success mb-2" onClick={verifyOtp}>
             Verify & Login
+          </button>
+
+          {/* RESEND OTP */}
+          <button className="btn btn-outline-secondary" onClick={sendOtp}>
+            Resend OTP
           </button>
         </>
       )}

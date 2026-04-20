@@ -88,7 +88,7 @@ exports.register = async (req, res) => {
       success: true,
       message: "OTP sent to your mobile. Please verify your account.",
       role: user.role,
-      otp: otp, 
+      otp: otp,
     });
   } catch (err) {
     //res.status(500).json({ message: "Server error", error: err.message });
@@ -130,7 +130,7 @@ exports.login = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "OTP sent to your phone",
-      otp: otp
+      otp: otp,
     });
   } catch (err) {
     console.log("FULL ERROR LOG:", err);
@@ -401,17 +401,26 @@ exports.resetPassword = async (req, res) => {
 
     const user = await User.findOne({ email });
 
+    // ✅ FIX 1: CHECK USER
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // ✅ FIX 2: HASH PASSWORD
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
 
+    // ✅ CLEAN OTP DATA
     user.otp = null;
     user.otpExpires = null;
     user.otpAttempts = 0;
 
     await user.save();
 
-    res.json({ message: "Password reset successful", otp: otp });
+    // ✅ FIX 3: REMOVE otp FROM RESPONSE
+    res.json({ message: "Password reset successful" });
   } catch (err) {
+    console.log("RESET ERROR:", err); // 🔍 debug
     res.status(500).json({ message: err.message });
   }
 };

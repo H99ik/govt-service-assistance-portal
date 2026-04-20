@@ -129,6 +129,7 @@ exports.login = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "OTP sent to your phone",
+      otp: otp
     });
   } catch (err) {
     console.log("FULL ERROR LOG:", err);

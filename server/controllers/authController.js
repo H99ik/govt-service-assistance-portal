@@ -229,6 +229,7 @@ exports.loginWithOtp = async (req, res) => {
     res.json({
       success: true,
       message: "OTP sent to your mobile. Please verify to login.",
+      otp: otp,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

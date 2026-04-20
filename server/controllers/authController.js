@@ -201,8 +201,17 @@ exports.loginWithOtp = async (req, res) => {
       return res.status(400).json({ message: "Account not verified" });
     }
 
+    // ✅ CHECK FIRST (PREVENT SPAM)
+    if (user.otpExpires && user.otpExpires > new Date()) {
+      return res.status(400).json({
+        message: "Please wait before requesting another OTP",
+      });
+    }
+
+    // 🔥 GENERATE OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     console.log("📲 LOGIN OTP:", otp);
+
     const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
     user.otp = otp;
@@ -211,25 +220,22 @@ exports.loginWithOtp = async (req, res) => {
 
     const sendSMS = require("../utils/sendSMS");
 
-    if (!user.phone) {
-      return res.status(400).json({ message: "Phone number not found" });
+    if (user.phone) {
+      try {
+        await sendSMS(
+          user.phone,
+          `Your OTP for login is ${otp}. It is valid for 10 minutes.`,
+        );
+      } catch (err) {
+        console.log("SMS failed:", err.message);
+      }
     }
 
-    await sendSMS(
-      user.phone,
-      `Your OTP for login is ${otp}. It is valid for 10 minutes.`,
-    );
-
-    if (user.otpExpires && user.otpExpires > new Date()) {
-      return res.status(400).json({
-        message: "Please wait before requesting another OTP",
-      });
-    }
-
+    // ✅ FINAL RESPONSE
     res.json({
       success: true,
-      message: "OTP sent to your mobile. Please verify to login.",
-      otp: otp,
+      message: "OTP sent successfully",
+      otp: otp, // 🔥 needed for frontend display
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -23,9 +23,15 @@ function LoginOTP() {
         { phone },
       );
 
-      // 🔥 SHOW OTP FOR 10 SEC (fallback)
-      if (res.data.otp) {
-        setShowOtp(res.data.otp);
+      const otpValue = res.data?.otp;
+
+      console.log("OTP VALUE:", otpValue); // debug
+
+      if (otpValue) {
+        setShowOtp(otpValue);
+
+        alert(`Your OTP is ${otpValue}`);
+
         setTimeout(() => setShowOtp(""), 10000);
       }
 

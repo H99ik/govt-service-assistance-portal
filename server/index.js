@@ -7,7 +7,6 @@ const serviceRoutes = require("./routes/serviceRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const userRoutes = require("./routes/userRoutes");
 
-
 // Load environment variables
 dotenv.config();
 
@@ -17,9 +16,17 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
 app.use(express.json());
-
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://govt-service-assistance-portal.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  }),
+);
 
 // Use Routes (Move these ABOVE app.listen)
 app.use("/api/auth", authRoutes);
@@ -27,8 +34,6 @@ app.use("/api/services", serviceRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/users", userRoutes);
-
-
 
 // Basic Route
 app.get("/", (req, res) => {

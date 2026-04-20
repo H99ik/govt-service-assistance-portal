@@ -33,7 +33,18 @@ function Login() {
         },
       );
 
-      alert("OTP sent!");
+      // 🔥 GET OTP FROM RESPONSE
+      const otpValue = res.data?.otp;
+
+      console.log("LOGIN OTP:", otpValue);
+
+      // 🔥 SHOW OTP
+      if (otpValue) {
+        alert(`Your OTP is ${otpValue}`);
+      } else {
+        alert("OTP sent! Check your phone.");
+      }
+
       setOtpSent(true);
       setLoginMethod("email");
     } catch (error) {
@@ -84,7 +95,7 @@ function Login() {
     >
       {/* BACKGROUND IMAGE */}
       <img
-        src= {Emblem}
+        src={Emblem}
         alt="bg"
         style={{
           position: "absolute",

@@ -1,42 +1,72 @@
 # 🌐 Government Service Assistance Portal
 
-A full-stack MERN web application that helps citizens apply for government services, upload documents, track request status, and receive digitally generated certificates with QR verification.
+A full-stack **MERN web application** designed to simplify access to government services by connecting citizens with verified agents. Users can apply for services, upload documents, track request status, and receive digitally generated certificates with QR-based verification.
 
 ---
 
-## 🚀 Features
+## 🚀 Live Demo
 
-* 🔐 Authentication (JWT + OTP based login & registration)
-* 👥 Role-Based Access (Citizen / Agent / Admin)
-* 📝 Service Request System
-* 📂 Document Upload (Multer)
-* 📊 Agent Dashboard (Accept & Process Requests)
-* 🛠 Admin Dashboard (Approve / Reject Requests)
-* 📄 Certificate Generation (PDF with QR Code)
-* 🔍 QR-Based Certificate Verification
-* 🔔 Notification System
-* 👤 User Profile Management
-* 🔐 Secure Password System (last 3 password restriction)
+🔗 **Frontend (Vercel):** https://govt-service-assistance-portal.vercel.app
+🔗 **Backend (Render):** https://govt-service-assistance-portal.onrender.com
+
+---
+
+## ✨ Key Features
+
+### 🔐 Authentication System
+
+* OTP-based Registration & Login (Email + Password + OTP)
+* Phone OTP Login
+* Forgot Password with OTP Verification
+* Secure JWT-based session management
+
+### 👥 Role-Based Access
+
+* **Citizen:** Apply for services & track requests
+* **Agent:** Accept and process requests
+* **Admin:** Approve/reject requests & manage users
+
+### 📝 Service Management
+
+* Request submission with document upload
+* Real-time status tracking
+* Timeline-based request flow
+
+### 📄 Certificate System
+
+* Auto-generated certificates (PDF)
+* Integrated QR code verification
+* Unique tracking ID for each request
+
+### 🔔 Notifications
+
+* Real-time notification system
+* Read/unread status tracking
+
+### 👤 User Features
+
+* Profile management
+* Change password (with last 3 password restriction)
 
 ---
 
 ## 🛠 Tech Stack
 
-**Frontend:**
+### Frontend
 
 * React (Vite)
 * Bootstrap
 
-**Backend:**
+### Backend
 
 * Node.js
 * Express.js
 
-**Database:**
+### Database
 
 * MongoDB
 
-**Other Tools:**
+### Tools & Libraries
 
 * JWT (Authentication)
 * Multer (File Upload)
@@ -50,67 +80,89 @@ A full-stack MERN web application that helps citizens apply for government servi
 
 ### 1️⃣ Clone Repository
 
+```bash
 git clone https://github.com/H99ik/govt-service-assistance-portal
 cd govt-service-assistance-portal
+```
 
 ---
 
 ### 2️⃣ Setup Backend
 
+```bash
 cd server
 npm install
 npm start
+```
 
 ---
 
 ### 3️⃣ Setup Frontend
 
+```bash
 cd client
 npm install
 npm run dev
+```
 
 ---
 
-## 📄 Certificate System
+## 🔄 System Workflow
 
-* Certificates are generated automatically after admin approval
-* Each certificate contains a unique ID and QR code
-* Users can verify certificates via QR scan or verification page
+1. User registers → OTP verification
+2. User logs in → OTP authentication
+3. User submits service request
+4. Agent processes request
+5. Admin approves/rejects
+6. Certificate generated with QR code
+7. User downloads and verifies certificate
 
 ---
 
 ## 🔐 Security Features
 
 * JWT Authentication
-* OTP Verification
+* OTP-based Verification
 * Role-Based Access Control
 * Password History Restriction (last 3 passwords cannot be reused)
+* Secure API handling
 
 ---
 
 ## 📸 Screenshots
 
-(Add after UI polish)
+*(Add UI screenshots after final polish)*
+
+---
+
+## ⚠️ Challenges Faced
+
+* OTP integration and debugging across multiple flows
+* CORS and deployment issues (Vercel + Render)
+* API endpoint synchronization
+* Real-time testing and error handling
+
+---
+
+## 🚀 Future Enhancements
+
+* Multi-language support
+* Improved CSC-style UI/UX
+* Advanced analytics dashboard
+* Mobile responsiveness improvements
 
 ---
 
 ## 👨‍💻 Author
 
-Hardikgiri Goswami
+**Hardikgiri Goswami**
 
 ---
 
-## 💡 Project Status
+## 📌 Project Status
 
 ✔ Core functionality completed
-🚀 UI polish and deployment in progress
-
----
-
-## ⭐ Future Enhancements
-
-* Multi-language support
-* Improved UI/UX (CSC-style design)
-* Analytics dashboard
+✔ OTP authentication system implemented
+✔ Live deployment completed
 
 ---

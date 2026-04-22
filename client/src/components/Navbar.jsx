@@ -106,61 +106,60 @@ function Navbar() {
         Govt Portal
       </Link>
 
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary px-3">
-        {/* 🔥 TOGGLE BUTTON (VERY IMPORTANT) */}
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+      {/* TOGGLE BUTTON */}
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+      >
+        <span className="navbar-toggler-icon"></span>
+      </button>
 
-        {/* 🔥 COLLAPSIBLE MENU */}
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <Link to="/" className="nav-link text-white">
-                Home
-              </Link>
-            </li>
+      {/* COLLAPSE MENU */}
+      <div className="collapse navbar-collapse" id="navbarNav">
+        <ul className="navbar-nav ms-auto">
+          <li className="nav-item">
+            <Link to="/" className="nav-link text-white">
+              Home
+            </Link>
+          </li>
 
-            <li className="nav-item">
-              <Link to="/services" className="nav-link text-white">
-                Services
-              </Link>
-            </li>
+          <li className="nav-item">
+            <Link to="/services" className="nav-link text-white">
+              Services
+            </Link>
+          </li>
 
-            <li className="nav-item">
-              <Link to="/about" className="nav-link text-white">
-                About
-              </Link>
-            </li>
+          <li className="nav-item">
+            <Link to="/about" className="nav-link text-white">
+              About
+            </Link>
+          </li>
 
-            <li className="nav-item">
-              <Link to="/contact" className="nav-link text-white">
-                Contact
-              </Link>
-            </li>
-            {/* 🔥 AUTH BUTTONS INSIDE MENU */}
-            <li className="nav-item mt-2">
-              <Link to="/login" className="btn btn-light w-100 mb-2">
-                Login
-              </Link>
-            </li>
+          <li className="nav-item">
+            <Link to="/contact" className="nav-link text-white">
+              Contact
+            </Link>
+          </li>
 
-            <li className="nav-item">
-              <Link to="/register" className="btn btn-warning w-100">
-                Register
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+          {!token && (
+            <>
+              <li className="nav-item mt-2">
+                <Link to="/login" className="btn btn-light w-100 mb-2">
+                  Login
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link to="/register" className="btn btn-warning w-100">
+                  Register
+                </Link>
+              </li>
+            </>
+          )}
+        </ul>
+      </div>
 
       <div className="ms-auto d-flex align-items-center gap-3">
         {/* If user logged in */}

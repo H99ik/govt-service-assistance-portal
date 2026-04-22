@@ -88,7 +88,6 @@ body,
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
@@ -114,4 +113,19 @@ body,
     font-size: 12px;
     overflow-x: auto;
   }
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+    text-align: center;
+    width: 100%;
+  }
+
+  .nav-link {
+    padding: 10px 0;
+  }
+}
+
+.navbar-nav .btn {
+  font-size: 14px;
 }

@@ -107,11 +107,6 @@ function Navbar() {
       </Link>
 
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary px-3">
-        {/* Logo / Brand */}
-        <Link className="navbar-brand fw-bold" to="/">
-          Gov Portal
-        </Link>
-
         {/* 🔥 TOGGLE BUTTON (VERY IMPORTANT) */}
         <button
           className="navbar-toggler"
@@ -151,10 +146,22 @@ function Navbar() {
                 Contact
               </Link>
             </li>
+            {/* 🔥 AUTH BUTTONS INSIDE MENU */}
+            <li className="nav-item mt-2">
+              <Link to="/login" className="btn btn-light w-100 mb-2">
+                Login
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link to="/register" className="btn btn-warning w-100">
+                Register
+              </Link>
+            </li>
           </ul>
         </div>
       </nav>
-      
+
       <div className="ms-auto d-flex align-items-center gap-3">
         {/* If user logged in */}
         {token && user ? (

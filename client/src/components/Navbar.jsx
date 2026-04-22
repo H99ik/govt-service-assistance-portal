@@ -106,34 +106,55 @@ function Navbar() {
         Govt Portal
       </Link>
 
-      <div className="collapse navbar-collapse">
-        <ul className="navbar-nav ms-4">
-          <li className="nav-item">
-            <Link to="/" className="nav-link text-white mx-2">
-              Home
-            </Link>
-          </li>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-primary px-3">
+        {/* Logo / Brand */}
+        <Link className="navbar-brand fw-bold" to="/">
+          Gov Portal
+        </Link>
 
-          <li className="nav-item">
-            <Link to="/services" className="nav-link text-white mx-2">
-              Services
-            </Link>
-          </li>
+        {/* 🔥 TOGGLE BUTTON (VERY IMPORTANT) */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-          <li className="nav-item">
-            <Link to="/about" className="nav-link text-white mx-2">
-              About
-            </Link>
-          </li>
+        {/* 🔥 COLLAPSIBLE MENU */}
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <Link to="/" className="nav-link text-white">
+                Home
+              </Link>
+            </li>
 
-          <li className="nav-item">
-            <Link to="/contact" className="nav-link text-white mx-2">
-              Contact
-            </Link>
-          </li>
-        </ul>
-      </div>
+            <li className="nav-item">
+              <Link to="/services" className="nav-link text-white">
+                Services
+              </Link>
+            </li>
 
+            <li className="nav-item">
+              <Link to="/about" className="nav-link text-white">
+                About
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link to="/contact" className="nav-link text-white">
+                Contact
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
       <div className="ms-auto d-flex align-items-center gap-3">
         {/* If user logged in */}
         {token && user ? (

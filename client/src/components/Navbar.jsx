@@ -106,58 +106,31 @@ function Navbar() {
         Govt Portal
       </Link>
 
-      {/* TOGGLE BUTTON */}
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-
-      {/* COLLAPSE MENU */}
-      <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav ms-auto">
+      <div className="collapse navbar-collapse">
+        <ul className="navbar-nav ms-4">
           <li className="nav-item">
-            <Link to="/" className="nav-link text-white">
+            <Link to="/" className="nav-link text-white mx-2">
               Home
             </Link>
           </li>
 
           <li className="nav-item">
-            <Link to="/services" className="nav-link text-white">
+            <Link to="/services" className="nav-link text-white mx-2">
               Services
             </Link>
           </li>
 
           <li className="nav-item">
-            <Link to="/about" className="nav-link text-white">
+            <Link to="/about" className="nav-link text-white mx-2">
               About
             </Link>
           </li>
 
           <li className="nav-item">
-            <Link to="/contact" className="nav-link text-white">
+            <Link to="/contact" className="nav-link text-white mx-2">
               Contact
             </Link>
           </li>
-
-          {!token && (
-            <>
-              <li className="nav-item mt-2">
-                <Link to="/login" className="btn btn-light w-100 mb-2">
-                  Login
-                </Link>
-              </li>
-
-              <li className="nav-item">
-                <Link to="/register" className="btn btn-warning w-100">
-                  Register
-                </Link>
-              </li>
-            </>
-          )}
         </ul>
       </div>
 
